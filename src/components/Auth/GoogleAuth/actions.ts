@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 
 export async function loginWithGoogle(): Promise<string | void> {
   const supabase = await createClient();
-  console.log("Created Client");
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",

@@ -1,13 +1,17 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { loginWithGoogle } from "./actions";
 import Image from "next/image";
 
 export default function GoogleButton({ type }: { type: "signup" | "login" }) {
+  const router = useRouter();
   async function handleLoginWithGoogle() {
     console.log("Logging in with Google");
     const googleAuthError = await loginWithGoogle();
-    console.log("Google Auth Error:", googleAuthError);
+    if (googleAuthError) {
+      console.error("Error logging in with Google:", googleAuthError);
+    }
   }
 
   return (

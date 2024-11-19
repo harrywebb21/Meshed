@@ -4,7 +4,7 @@ import { Canvas } from "@react-three/fiber";
 export default function Scene({ children }: { children: React.ReactNode }) {
   return (
     <Canvas>
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       <ambientLight intensity={5} />
       <spotLight
         position={[1, 1, 10]}

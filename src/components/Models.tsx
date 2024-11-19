@@ -3,13 +3,15 @@ import { MeshTransmissionMaterial } from "@react-three/drei/core/MeshTransmissio
 import { useRef } from "react";
 import * as THREE from "three";
 
-export function GlassBall() {
+type GlassBallProps = JSX.IntrinsicElements["group"];
+
+export function GlassBall(props: GlassBallProps) {
   const glassSphere = useRef<THREE.Mesh>(null);
 
   return (
     <>
-      <Float floatIntensity={10} rotationIntensity={20}>
-        <group>
+      <group {...props}>
+        <Float floatIntensity={10} rotationIntensity={20}>
           <mesh ref={glassSphere} castShadow receiveShadow>
             <sphereGeometry args={[2, 32, 32]} />
             <MeshTransmissionMaterial
@@ -34,8 +36,8 @@ export function GlassBall() {
             <boxGeometry args={[1, 1, 1]} />
             <meshBasicMaterial color={"orange"} />
           </mesh>
-        </group>
-      </Float>
+        </Float>
+      </group>
     </>
   );
 }

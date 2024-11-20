@@ -1,19 +1,22 @@
+"use client";
 import SignoutButton from "@/components/Auth/signout/SignoutButton";
-import { createClient } from "@/utils/supabase/server";
+import CreateProjectButton from "@/components/dashboard/buttons/CreateProjectButton";
+import DashboardWrapper from "@/components/dashboard/DashboardWrapper";
+import ProjectSection from "@/components/dashboard/projects/ProjectSection";
+import { useAuthUser } from "@/utils/hooks/useAuthUser";
+import { useGetProfile } from "@/utils/hooks/useGetProfile";
 
-export default async function Dashboard() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function Dashboard() {
+  const user = useAuthUser();
+  const { profile } = useGetProfile(user?.id ?? "");
 
   return (
     <>
-      <div className=" w-full h-svh flex items-center flex-col gap-2 ">
-        <h1 className="font-black text-2xl">MESHED</h1>
-        <p>Welcome, {user?.user_metadata.display_name}!</p>
+      <DashboardWrapper>
+        <CreateProjectButton ownerId={profile?.id ?? ""} />
         <SignoutButton />
-      </div>
+        <ProjectSection />
+      </DashboardWrapper>
     </>
   );
 }

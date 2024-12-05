@@ -14,7 +14,6 @@ export default function CreateProjectButton({ ownerId }: { ownerId: string }) {
     mutationFn: async (data: { workspaceName: string; ownerId: string }) =>
       await createWorkspace(data),
     onSuccess: () => {
-      console.log("Project Created");
       queryClient.refetchQueries({ queryKey: ["workspaces"] });
     },
     onError: (error) => {
@@ -35,7 +34,7 @@ export default function CreateProjectButton({ ownerId }: { ownerId: string }) {
   return (
     <>
       <button
-        className="bg-black text-white p-2 rounded-md"
+        className="bg-black shadow-md border text-white p-2 rounded-md w-fit"
         onClick={() => setModalOpen(!modalOpen)}
       >
         Create Project

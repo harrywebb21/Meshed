@@ -38,3 +38,20 @@ export async function getWorkspaces(userId: string): Promise<Workspace[]> {
 
   return data;
 }
+
+export async function getWorkspaceById(
+  workspaceId: string
+): Promise<Workspace> {
+  const { data, error } = await supabase
+    .from("Workspace")
+    .select("*")
+    .eq("id", workspaceId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching workspaces:", error.message);
+    throw error;
+  }
+
+  return data;
+}

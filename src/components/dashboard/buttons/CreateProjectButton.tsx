@@ -1,11 +1,17 @@
 "use client";
 import Toast from "@/components/Toast";
+import { useAuthUser } from "@/utils/hooks/useAuthUser";
+import { useGetProfile } from "@/utils/hooks/useGetProfile";
 import { createWorkspace } from "@/utils/queries/workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+// import { FaPlus } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 
-export default function CreateProjectButton({ ownerId }: { ownerId: string }) {
+export default function CreateProjectButton() {
+  const user = useAuthUser();
+  const { profile } = useGetProfile(user?.id);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
   const queryClient = useQueryClient();
@@ -26,7 +32,7 @@ export default function CreateProjectButton({ ownerId }: { ownerId: string }) {
 
     createWorkspaceMutation.mutate({
       workspaceName: workspaceName,
-      ownerId: ownerId,
+      ownerId: profile!.id,
     });
     setModalOpen(false);
   }
@@ -34,10 +40,11 @@ export default function CreateProjectButton({ ownerId }: { ownerId: string }) {
   return (
     <>
       <button
-        className="bg-black shadow-md border text-white p-2 rounded-md w-fit"
+        className="shadow-md flex items-center gap-2 py-3 px-4 rounded-xl bg-primary-green "
         onClick={() => setModalOpen(!modalOpen)}
       >
-        Create Project
+        {/* <FaPlus className=" text-black text-sm" /> */}
+        <p className="text-black font-semibold text-sm">New Project</p>
       </button>
       {modalOpen && (
         <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 flex items-center justify-center">

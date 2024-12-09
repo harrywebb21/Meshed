@@ -4,7 +4,6 @@ import { getWorkspaces } from "@/utils/queries/workspace";
 import { Workspace } from "@/utils/supabase/types/dbTypes";
 import { useQuery } from "@tanstack/react-query";
 import ProjectCard from "./ProjectCard";
-import CreateProjectButton from "../buttons/CreateProjectButton";
 
 export default function ProjectSection() {
   const userId = useAuthUser();
@@ -26,8 +25,7 @@ export default function ProjectSection() {
   }
 
   return (
-    <div className="flex w-full  flex-col h-full p-4 gap-2">
-      <CreateProjectButton ownerId={profile?.id ?? ""} />
+    <div className="flex  flex-col gap-2 h-full w-full">
       <div className=" grid grid-flow-row sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4  h-full">
         {data.map((workspace) => (
           <ProjectCard key={workspace.id} projectData={workspace} />

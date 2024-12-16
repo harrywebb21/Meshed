@@ -6,5 +6,8 @@ export interface Geometry {
   width: number;
   height: number;
   depth: number;
+  rotateX?: number;
+  rotateY?: number;
+  rotateZ?: number;
   colour: string;
 }

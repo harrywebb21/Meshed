@@ -3,7 +3,7 @@ import { getWorkspaceById } from "@/utils/queries/workspace";
 import { useQuery } from "@tanstack/react-query";
 import { Workspace } from "@/utils/supabase/types/dbTypes";
 import { useEffect, useRef, useState } from "react";
-import Cube from "@/components/design/geometries/Cube";
+import { Cube } from "@/components/design/geometries/Cube";
 import { Geometry } from "@/utils/types";
 import WorkspaceScene from "@/components/design/WorkspaceScene";
 import * as THREE from "three";
@@ -15,6 +15,12 @@ export default function WorkspacePage({
 }>) {
   const { id } = params;
 
+  const { data: workspaceData } = useQuery<Workspace>({
+    queryKey: ["workspace", id],
+    queryFn: async () => getWorkspaceById(id),
+    enabled: !!id,
+  });
+
   const [geometries, setGeometries] = useState<Geometry[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -25,24 +31,15 @@ export default function WorkspacePage({
   const heightInputRef = useRef<HTMLInputElement>(null);
   const depthInputRef = useRef<HTMLInputElement>(null);
   const colourInputRef = useRef<HTMLInputElement>(null);
+  const rotateXInputRef = useRef<HTMLInputElement>(null);
+  const rotateYInputRef = useRef<HTMLInputElement>(null);
+  const rotateZInputRef = useRef<HTMLInputElement>(null);
 
   const geometryRef = useRef<(THREE.Mesh | null)[]>([]);
 
-  const { data: workspaceData } = useQuery<Workspace>({
-    queryKey: ["workspace", id],
-    queryFn: async () => getWorkspaceById(id),
-    enabled: !!id,
-  });
-
-  console.log(workspaceData);
-
-  useEffect(() => {
-    console.log(geometries);
-  }, [geometries]);
-
-  const handleCreateCubeGeometry = (type: Geometry["type"]) => {
+  const handleCreateCubeGeometry = () => {
     const newGeometry: Geometry = {
-      type,
+      type: "cube",
       x: 0,
       y: 0,
       z: 0,
@@ -50,6 +47,9 @@ export default function WorkspacePage({
       height: 1,
       depth: 1,
       colour: "#ffffff",
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
     };
     setGeometries((prevGeometries) => [...prevGeometries, newGeometry]);
     setSelectedIndex(geometries.length);
@@ -60,6 +60,9 @@ export default function WorkspacePage({
     if (heightInputRef.current) heightInputRef.current.value = "1";
     if (depthInputRef.current) depthInputRef.current.value = "1";
     if (colourInputRef.current) colourInputRef.current.value = "#ffffff";
+    if (rotateXInputRef.current) rotateXInputRef.current.value = "0";
+    if (rotateYInputRef.current) rotateYInputRef.current.value = "0";
+    if (rotateZInputRef.current) rotateZInputRef.current.value = "0";
   };
 
   const handleInputChange = (field: keyof Geometry, value: string) => {
@@ -88,6 +91,12 @@ export default function WorkspacePage({
     if (depthInputRef.current)
       depthInputRef.current.value = geometry.depth.toString();
     if (colourInputRef.current) colourInputRef.current.value = geometry.colour;
+    if (rotateXInputRef.current)
+      rotateXInputRef.current.value = geometry.rotateX?.toString() || "0";
+    if (rotateYInputRef.current)
+      rotateYInputRef.current.value = geometry.rotateY?.toString() || "0";
+    if (rotateZInputRef.current)
+      rotateZInputRef.current.value = geometry.rotateZ?.toString() || "0";
   };
 
   const handleSelectGeometry = (index: number) => {
@@ -98,7 +107,8 @@ export default function WorkspacePage({
 
   const handlePositionChange = (
     index: number,
-    position: [number, number, number]
+    position: [number, number, number],
+    rotation: [number, number, number]
   ) => {
     setGeometries((prevGeometries) =>
       prevGeometries.map((geometry, i) =>
@@ -108,15 +118,24 @@ export default function WorkspacePage({
               x: position[0],
               y: position[1],
               z: position[2],
+              rotateX: rotation[0],
+              rotateY: rotation[1],
+              rotateZ: rotation[2],
             }
           : geometry
       )
     );
+    updateInputValues(geometries[index]);
   };
 
   return (
     <>
-      <div className="fixed top-4 left-4 z-10 flex flex-col gap-2 p-4 border border-white/20 bg-primary-gray-950 rounded-xl">
+      <div className="fixed top-4 left-4 z-10 flex flex-col gap-2 p-4 shadow-md bg-primary-gray-950 rounded-xl">
+        <h1 className="font-bold text-xl">Create Geometry</h1>
+        <h3>Postition</h3>
+        <label className="text-white" htmlFor="xInput">
+          x
+        </label>
         <input
           type="text"
           placeholder="x"
@@ -124,6 +143,7 @@ export default function WorkspacePage({
           onChange={(e) => handleInputChange("x", e.target.value)}
           ref={xInputRef}
         />
+        <label className="text-white">y</label>
         <input
           type="text"
           placeholder="y"
@@ -131,6 +151,7 @@ export default function WorkspacePage({
           onChange={(e) => handleInputChange("y", e.target.value)}
           ref={yInputRef}
         />
+        <label className="text-white">z</label>
         <input
           type="text"
           placeholder="z"
@@ -138,6 +159,7 @@ export default function WorkspacePage({
           onChange={(e) => handleInputChange("z", e.target.value)}
           ref={zInputRef}
         />
+        <h2 className="text-white">Dimensions</h2>
         <input
           type="text"
           placeholder="width"
@@ -159,16 +181,37 @@ export default function WorkspacePage({
           onChange={(e) => handleInputChange("depth", e.target.value)}
           ref={depthInputRef}
         />
+        <h2 className="text-white">Rotation</h2>
+        <input
+          type="text"
+          placeholder="x"
+          name="rotationXInput"
+          onChange={(e) => handleInputChange("rotateX", e.target.value)}
+          ref={rotateXInputRef}
+        />
+        <input
+          type="text"
+          placeholder="y"
+          name="rotationYInput"
+          onChange={(e) => handleInputChange("rotateY", e.target.value)}
+          ref={rotateYInputRef}
+        />
+        <input
+          type="text"
+          placeholder="z"
+          name="rotationZInput"
+          onChange={(e) => handleInputChange("rotateX", e.target.value)}
+          ref={rotateZInputRef}
+        />
+
+        <label className="text-white">Colour</label>
         <input
           type="color"
           name="colourInput"
           onChange={(e) => handleInputChange("colour", e.target.value)}
           ref={colourInputRef}
         />
-        <button
-          onClick={() => handleCreateCubeGeometry("cube")}
-          className=" bg-green-500"
-        >
+        <button onClick={handleCreateCubeGeometry} className=" bg-green-500">
           Cube Geometry
         </button>
       </div>
@@ -181,16 +224,23 @@ export default function WorkspacePage({
                 return (
                   <Cube
                     key={index}
-                    ref={(mesh) => (geometryRef.current[index] = mesh)}
-                    showPivot={selectedIndex === index}
+                    ref={(mesh: THREE.Mesh | null) => {
+                      geometryRef.current[index] = mesh;
+                    }}
+                    // showPivot={selectedIndex === index}
                     onClick={() => handleSelectGeometry(index)}
                     position={[geometry.x, geometry.y, geometry.z]}
+                    rotation={[
+                      geometry.rotateX || 0,
+                      geometry.rotateY || 0,
+                      geometry.rotateZ || 0,
+                    ]}
                     width={geometry.width}
                     height={geometry.height}
                     depth={geometry.depth}
                     colour={geometry.colour}
-                    onPositionChange={(position) =>
-                      handlePositionChange(index, position)
+                    onPositionChange={(position, rotation) =>
+                      handlePositionChange(index, position, rotation)
                     }
                   />
                 );

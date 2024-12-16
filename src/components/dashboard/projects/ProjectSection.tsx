@@ -25,8 +25,8 @@ export default function ProjectSection() {
   }
 
   return (
-    <div className="flex  flex-col gap-2 h-full w-full">
-      <div className=" grid grid-flow-row sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4  h-full">
+    <div className="flex  flex-col gap-2 h-full w-full pr-4">
+      <div className=" grid grid-flow-row sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4  h-full">
         {data.map((workspace) => (
           <ProjectCard key={workspace.id} projectData={workspace} />
         ))}

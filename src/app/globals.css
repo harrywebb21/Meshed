@@ -8,6 +8,19 @@
   inherits: false;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(145deg, #33f563, #4cf376, #33f563);
+  border-radius: 10px;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -32,6 +45,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+input {
+  @apply text-black;
 }
 
 .create-project-button {

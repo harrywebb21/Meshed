@@ -5,7 +5,21 @@ import {
   Grid,
   OrbitControls,
 } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
+import { useEffect } from "react";
+import * as THREE from "three";
+
+function CameraSetup() {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    camera.position.set(5, 1, 5);
+    (camera as THREE.PerspectiveCamera).fov = 25;
+    camera.updateProjectionMatrix();
+  }, [camera]);
+
+  return null;
+}
 
 export default function WorkspaceScene({
   children,
@@ -20,13 +34,14 @@ export default function WorkspaceScene({
         intensity={0.1}
       />
       <pointLight position={[10, 10, 10]} />
-      <perspectiveCamera position={[10, 10, 12]} fov={25} />
+      {/* <perspectiveCamera position={[10, 10, 12]} fov={25} /> */}
+      <CameraSetup />
 
       {children}
       <group>
         <OrbitControls makeDefault />
         <Grid
-          position={[0, -0.01, 0]}
+          position={[0, 0, 0]}
           args={[10, 10]}
           cellColor={"white"}
           cellSize={0.2}

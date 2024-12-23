@@ -1,3 +1,5 @@
+import { Euler, Vector3 } from "@react-three/fiber";
+
 export interface Geometry {
   type: "cube" | "sphere" | "cylinder" | "plane";
   x: number;
@@ -10,4 +12,14 @@ export interface Geometry {
   rotateY?: number;
   rotateZ?: number;
   colour: string;
+}
+
+export interface CubeMesh {
+  type: "cube";
+  width: number;
+  height: number;
+  depth: number;
+  colour: string;
+  position: Vector3;
+  rotation: Euler;
 }

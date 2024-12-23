@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      Mesh: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          mesh_data: Json
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          mesh_data: Json
+          workspace_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          mesh_data?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Mesh_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "Profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Mesh_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "Workspace"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Profile: {
         Row: {
           created_at: string
@@ -62,7 +101,7 @@ export type Database = {
           {
             foreignKeyName: "Workspace_owner_id_fkey"
             columns: ["owner_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
           },

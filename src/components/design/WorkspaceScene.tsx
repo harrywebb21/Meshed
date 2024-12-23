@@ -42,11 +42,14 @@ export default function WorkspaceScene({
         <OrbitControls makeDefault />
         <Grid
           position={[0, 0, 0]}
-          args={[10, 10]}
+          args={[100, 100]}
+          fadeDistance={100}
+          fadeStrength={10}
           cellColor={"white"}
           cellSize={0.2}
-          sectionColor={"green"}
+          sectionColor={"white"}
           sectionSize={1}
+          sectionThickness={0.5}
         />
       </group>
       <GizmoHelper alignment="bottom-right" margin={[80, 80]}>

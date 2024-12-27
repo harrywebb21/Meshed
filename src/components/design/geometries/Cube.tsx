@@ -4,8 +4,6 @@ import React, { useRef } from "react";
 import * as THREE from "three";
 
 interface CubeProps extends MeshProps {
-  workspaceId: string;
-  userId: string;
   width: number;
   height: number;
   depth: number;
@@ -15,6 +13,7 @@ interface CubeProps extends MeshProps {
   onClick?: () => void;
   showPivot?: boolean;
   onPositionChange?: (position: Vector3, rotation: Euler) => void;
+  wireframe?: boolean;
 }
 
 export const Cube = ({
@@ -22,7 +21,7 @@ export const Cube = ({
   height,
   depth,
   colour,
-
+  wireframe = false,
   onClick,
   ...props
 }: CubeProps) =>
@@ -77,7 +76,7 @@ export const Cube = ({
       >
         <mesh {...props} onClick={onClick} ref={cubeRef}>
           <boxGeometry args={[width, height, depth]} />
-          <meshStandardMaterial color={colour} wireframe />
+          <meshStandardMaterial color={colour} wireframe={wireframe} />
         </mesh>
       </PivotControls>
     );

@@ -14,11 +14,9 @@ export default async function Login() {
     redirect("/dashboard");
   }
   return (
-    <>
-      <div className=" w-full h-svh flex flex-col items-center gap-4 justify-center">
-        <LoginForm />
-        <GoogleButton type="login" />
-      </div>
-    </>
+    <div className=" w-full h-svh flex flex-col items-center gap-4 justify-center">
+      <LoginForm />
+      <GoogleButton type="login" />
+    </div>
   );
 }

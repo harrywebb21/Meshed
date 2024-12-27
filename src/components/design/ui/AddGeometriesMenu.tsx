@@ -17,6 +17,7 @@ export default function AddGeometriesMenu({
       height: 1,
       depth: 1,
       colour: "#ffffff",
+      wireframe: false,
     };
     onCreateGeometry(newGeometry);
   };

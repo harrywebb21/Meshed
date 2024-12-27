@@ -22,4 +22,5 @@ export interface CubeMesh {
   colour: string;
   position: Vector3;
   rotation: Euler;
+  wireframe: boolean;
 }

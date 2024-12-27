@@ -12,11 +12,9 @@ export default async function Signup() {
     redirect("/dashboard");
   }
   return (
-    <>
-      <div className=" w-full h-svh flex flex-col items-center gap-4 justify-center">
-        <SignupForm />
-        <GoogleButton type="signup" />
-      </div>
-    </>
+    <div className=" w-full h-svh flex flex-col items-center gap-4 justify-center">
+      <SignupForm />
+      <GoogleButton type="signup" />
+    </div>
   );
 }

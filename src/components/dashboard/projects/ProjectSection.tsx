@@ -7,14 +7,12 @@ import ProjectCard from "./ProjectCard";
 
 export default function ProjectSection() {
   const userId = useAuthUser();
-  console.log("userId", userId);
-  const { profile } = useGetProfile(userId?.id);
-  console.log("profile", profile);
+  const profile = useGetProfile(userId?.id);
 
   const { data, error } = useQuery<Workspace[]>({
     queryKey: ["workspaces"],
-    queryFn: async () => getWorkspaces(profile!.id),
-    enabled: !!profile?.id,
+    queryFn: async () => getWorkspaces(profile.profile!.id),
+    enabled: !!profile.profile?.id,
   });
 
   if (error) {

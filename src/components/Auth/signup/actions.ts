@@ -17,7 +17,23 @@ export async function signup(formData: FormData): Promise<string | void> {
     },
   };
 
-  const { error } = await supabase.auth.signUp(data);
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.signUp(data);
+
+  const { error: profileError } = await supabase.from("profiles").insert([
+    {
+      user_id: user?.id,
+      email: formData.get("email") as string,
+      display_name: formData.get("display_name") as string,
+    },
+  ]);
+
+  if (profileError) {
+    console.error("Error creating profile:", profileError.message);
+    return profileError.message;
+  }
 
   if (error) {
     console.error("Error logging in:", error.message);

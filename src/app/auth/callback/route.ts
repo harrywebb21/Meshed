@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 // The client you created from the Server-Side Auth instructions
 import { createClient } from "@/utils/supabase/server";
+import { handleGoogleCallback } from "@/components/Auth/GoogleAuth/actions";
 
 export async function GET(request: Request) {
   console.log("GET /auth/callback");
@@ -11,7 +12,9 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data: sessionData, error } =
+      await supabase.auth.exchangeCodeForSession(code);
+    handleGoogleCallback(sessionData);
     if (!error) {
       const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === "development";

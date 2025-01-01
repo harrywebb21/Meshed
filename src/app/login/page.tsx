@@ -7,16 +7,16 @@ import { redirect } from "next/navigation";
 
 export default async function Login() {
   const supabase = await createClient();
-  const user = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (user) {
     redirect("/dashboard");
   }
   return (
-    <>
-      <div className=" w-full h-svh flex flex-col items-center gap-4 justify-center">
-        <LoginForm />
-        <GoogleButton type="login" />
-      </div>
-    </>
+    <div className=" w-full h-svh flex flex-col items-center gap-4 justify-center">
+      <LoginForm />
+      <GoogleButton type="login" />
+    </div>
   );
 }

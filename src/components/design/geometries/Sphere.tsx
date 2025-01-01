@@ -1,12 +1,11 @@
 import { PivotControls } from "@react-three/drei";
 import { MeshProps, Vector3, Euler } from "@react-three/fiber";
-import React, { useRef } from "react";
-import * as THREE from "three";
+import React from "react";
 
-interface CubeProps extends MeshProps {
-  width: number;
-  height: number;
-  depth: number;
+interface SphereProps extends MeshProps {
+  radius: number;
+  heightSegments: number;
+  widthSegments: number;
   colour: string | null;
   position: Vector3;
   rotation: Euler;
@@ -17,18 +16,16 @@ interface CubeProps extends MeshProps {
   showControls?: boolean;
 }
 
-export const Cube = ({
-  width,
-  height,
-  depth,
+export const Sphere = ({
+  radius,
+  heightSegments,
+  widthSegments,
   colour,
   wireframe = false,
   onClick,
   showControls = false,
   ...props
-}: CubeProps) => {
-  const cubeRef = useRef<THREE.Mesh>(null);
-
+}: SphereProps) => {
   return (
     <PivotControls
       anchor={[0, 0, 0]}
@@ -40,8 +37,8 @@ export const Cube = ({
       disableScaling={!showControls}
       disableSliders={!showControls}
     >
-      <mesh {...props} onClick={onClick} ref={cubeRef}>
-        <boxGeometry args={[width, height, depth]} />
+      <mesh {...props} onClick={onClick}>
+        <sphereGeometry args={[radius, widthSegments, heightSegments]} />
         <meshStandardMaterial
           color={colour || undefined}
           wireframe={wireframe}

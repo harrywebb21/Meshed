@@ -11,24 +11,54 @@ export type Database = {
     Tables: {
       Mesh: {
         Row: {
+          colour: string | null
           created_at: string
           created_by: string
           id: string
+          layer_name: string | null
           mesh_data: Json
+          pos_x: number | null
+          pos_y: number | null
+          pos_z: number | null
+          rot_x: number | null
+          rot_y: number | null
+          rot_z: number | null
+          type: string | null
+          wireframe: boolean | null
           workspace_id: string
         }
         Insert: {
+          colour?: string | null
           created_at?: string
           created_by: string
           id?: string
+          layer_name?: string | null
           mesh_data: Json
+          pos_x?: number | null
+          pos_y?: number | null
+          pos_z?: number | null
+          rot_x?: number | null
+          rot_y?: number | null
+          rot_z?: number | null
+          type?: string | null
+          wireframe?: boolean | null
           workspace_id?: string
         }
         Update: {
+          colour?: string | null
           created_at?: string
           created_by?: string
           id?: string
+          layer_name?: string | null
           mesh_data?: Json
+          pos_x?: number | null
+          pos_y?: number | null
+          pos_z?: number | null
+          rot_x?: number | null
+          rot_y?: number | null
+          rot_z?: number | null
+          type?: string | null
+          wireframe?: boolean | null
           workspace_id?: string
         }
         Relationships: [

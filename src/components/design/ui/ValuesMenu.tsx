@@ -16,6 +16,9 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
   const [rotationX, setRotationX] = useState<number>(meshData?.rot_x || 0);
   const [rotationY, setRotationY] = useState<number>(meshData?.rot_y || 0);
   const [rotationZ, setRotationZ] = useState<number>(meshData?.rot_z || 0);
+  const [scaleX, setScaleX] = useState<number>(meshData?.scale_x || 1);
+  const [scaleY, setScaleY] = useState<number>(meshData?.scale_y || 1);
+  const [scaleZ, setScaleZ] = useState<number>(meshData?.scale_z || 1);
   const [colour, setColour] = useState<string>(meshData?.colour || "");
   const [wireframe, setWireframe] = useState<boolean>(
     meshData?.wireframe || false
@@ -34,6 +37,9 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
         newMeshData.rot_y,
         newMeshData.rot_z,
         newMeshData.colour,
+        newMeshData.scale_x,
+        newMeshData.scale_y,
+        newMeshData.scale_z,
         newMeshData.wireframe
       );
     },
@@ -64,10 +70,28 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
       setRotationZ(meshData?.rot_z ?? 0);
       setColour(meshData?.colour ?? "");
       setWireframe(meshData?.wireframe ?? false);
+      setScaleX(meshData?.scale_x ?? 1);
+      setScaleY(meshData?.scale_y ?? 1);
+      setScaleZ(meshData?.scale_z ?? 1);
     }
   }, [meshData]);
-
   useEffect(() => {
+    if (
+      positionX.toString() === "" ||
+      positionY.toString() === "" ||
+      positionZ.toString() === "" ||
+      rotationX.toString() === "" ||
+      rotationY.toString() === "" ||
+      rotationZ.toString() === "" ||
+      scaleX.toString() === "" ||
+      scaleY.toString() === "" ||
+      scaleZ.toString() === "" ||
+      colour === "" ||
+      wireframe.toString() === ""
+    ) {
+      return;
+    }
+
     meshUpdateQuery.mutate({
       pos_x: positionX,
       pos_y: positionY,
@@ -75,12 +99,13 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
       rot_x: rotationX,
       rot_y: rotationY,
       rot_z: rotationZ,
+      scale_x: scaleX,
+      scale_y: scaleY,
+      scale_z: scaleZ,
       colour: colour,
-      mesh_data: {
-        wireframe: wireframe,
-      },
       wireframe: wireframe,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     positionX,
     positionY,
@@ -88,6 +113,9 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
     rotationX,
     rotationY,
     rotationZ,
+    scaleX,
+    scaleY,
+    scaleZ,
     colour,
     wireframe,
   ]);
@@ -149,7 +177,33 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
           />
         </div>
       </div>
-      <h1 className=" text-sm text-neutral-600">Scale</h1>
+      <div className=" p-2 bg-primary-gray-900 rounded-lg shadow-md flex flex-col gap-2">
+        <h1 className=" text-sm text-neutral-600">Scale</h1>
+        <div className="flex max-w-56 gap-2">
+          <Input
+            label="X"
+            value={scaleX}
+            type="number"
+            returnValue={(value) => handleChange(value, setScaleX)}
+            onChange={(e) => handleChange(e.target.value, setScaleX)}
+          />
+          <Input
+            label="Y"
+            value={scaleY}
+            type="number"
+            returnValue={(value) => handleChange(value, setScaleY)}
+            onChange={(e) => handleChange(e.target.value, setScaleY)}
+          />
+          <Input
+            label="Z"
+            value={scaleZ}
+            type="number"
+            returnValue={(value) => handleChange(value, setScaleZ)}
+            onChange={(e) => handleChange(e.target.value, setScaleZ)}
+          />
+        </div>
+      </div>
+
       <div className=" p-2 bg-primary-gray-900 rounded-lg shadow-md flex flex-col gap-2">
         <h1 className=" text-sm text-neutral-600">Colour</h1>
         <Input

@@ -2,7 +2,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Mesh, Workspace } from "@/utils/supabase/types/dbTypes";
 import { Cube } from "@/components/design/geometries/Cube";
-import { CubeMeshData, SphereMeshData } from "@/utils/types";
 import WorkspaceScene from "@/components/design/WorkspaceScene";
 import { useAuthUser } from "@/utils/hooks/useAuthUser";
 import { useGetProfile } from "@/utils/hooks/useGetProfile";
@@ -15,6 +14,7 @@ import ValuesMenu from "@/components/design/ui/ValuesMenu";
 import WorkspaceValuesMenu from "@/components/design/ui/WorkspaceValuesMenu";
 import { createClient } from "@/utils/supabase/client";
 import { Sphere } from "@/components/design/geometries/Sphere";
+import { CubeGeometry, SphereGeometry } from "@/utils/types";
 
 export default function WorkspacePage({
   params,
@@ -25,11 +25,11 @@ export default function WorkspacePage({
   const { id } = params;
   const user = useAuthUser();
   const profile = useGetProfile(user?.id);
-  //
+
   //STATES
   const [selectedGeometry, setSelectedGeometry] = useState<Mesh | null>(null);
   const [geometries, setGeometries] = useState<Mesh[]>([]);
-  //
+
   //QUERIES AND DATA FETCHING
   const queryClient = useQueryClient();
   const supabase = createClient();
@@ -44,16 +44,46 @@ export default function WorkspacePage({
     queryFn: async () => getMeshes(id),
     enabled: !!id,
   });
+
+  // MUTATIONS
+  const newMeshMutation = useMutation({
+    mutationFn: async (newGeometry: Mesh) => {
+      await addMesh(newGeometry);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["meshes", id],
+      });
+    },
+    onError: (error) => {
+      console.error("Error adding mesh:", error);
+    },
+  });
+  const updateMeshCountMutation = useMutation({
+    mutationFn: async (newMeshCounts: { [key: string]: number }) => {
+      await supabase
+        .from("Workspace")
+        .update({ mesh_counts: newMeshCounts })
+        .eq("id", id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["workspace", id],
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating mesh counts:", error);
+    },
+  });
+
+  // SUBSCRIPTIONS - Realtime updates
   useEffect(() => {
     const channel = supabase
       .channel("meshes")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "Mesh" },
+        { event: "UPDATE", schema: "public", table: "Mesh" },
         (payload) => {
-          // queryClient.invalidateQueries({
-          //   queryKey: ["meshes", id],
-          // });
           console.log("Meshes updated", payload);
           setGeometries((prev) => {
             const newGeometries = prev.filter(
@@ -68,51 +98,73 @@ export default function WorkspacePage({
       supabase.removeChannel(channel);
     };
   }, [supabase, queryClient, id, setGeometries]);
-  const newMeshMutation = useMutation({
-    mutationFn: async (newGeometry: Mesh) => {
-      await addMesh(newGeometry);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["meshes", id],
-      });
-    },
-    onError: (error) => {
-      console.error("Error adding mesh:", error);
-    },
-  });
 
+  // EFFECTS
   useEffect(() => {
     if (meshData) {
       setGeometries(meshData);
     }
   }, [meshData]);
 
-  const handleCreateGeometry = (newGeometry: CubeMeshData | SphereMeshData) => {
+  // FUNCTIONS / HANDLERS
+  const handleCreateGeometry = (newGeometry: CubeGeometry | SphereGeometry) => {
     try {
+      const meshCounts: { [key: string]: number } =
+        (workspaceData?.mesh_counts as { [key: string]: number }) ?? {};
+      const meshType = newGeometry?.type;
+
+      const currentMeshCount = meshCounts[meshType] ?? 0;
+      const newMeshCount = currentMeshCount + 1;
+      meshCounts[meshType] = newMeshCount;
+
       const newMesh = {
         id: crypto.randomUUID(),
         created_at: new Date().toISOString(),
         created_by: profile.profile!.id,
         workspace_id: id,
-        type: (newGeometry as { type: string }).type,
-        layer_name:
-          (newGeometry as { type: string }).type +
-          " " +
-          (geometries.length + 1),
-        mesh_data: {
-          ...newGeometry,
-        },
-        colour: (newGeometry as unknown as { colour: string }).colour,
-        pos_x: 0,
-        pos_y: 0,
-        pos_z: 0,
-        rot_x: 0,
-        rot_y: 0,
-        rot_z: 0,
-        wireframe: false,
+        type: newGeometry.type,
+        layer_name: `${newGeometry.type} ${newMeshCount}`,
+        colour: newGeometry.colour,
+        pos_x: newGeometry.pos_x,
+        pos_y: newGeometry.pos_y,
+        pos_z: newGeometry.pos_z,
+        rot_x: newGeometry.rot_x ?? null,
+        rot_y: newGeometry.rot_y ?? null,
+        rot_z: newGeometry.rot_z ?? null,
+        wireframe: newGeometry.wireframe,
+        arc: null,
+        cap_segments: null,
+        depth: null,
+        height: null,
+        length: null,
+        radius: null,
+        radius_bottom: null,
+        radius_top: null,
+        radial_segments: null,
+        tube: null,
+        tubular_segments: null,
+        width: null,
+        width_segments: null,
+        height_segments: null,
+        depth_segments: null,
+        inner_radius: null,
+        open_ended: null,
+        outer_radius: null,
+        p: null,
+        q: null,
+        theta_length: null,
+        theta_start: null,
+        theta_segments: null,
+        phi_length: null,
+        phi_segments: null,
+        phi_start: null,
+        scale_x: null,
+        scale_y: null,
+        scale_z: null,
       };
+
       newMeshMutation.mutate(newMesh);
+      updateMeshCountMutation.mutate(meshCounts);
     } catch (error) {
       console.error("Error adding mesh:", error);
     }
@@ -122,7 +174,7 @@ export default function WorkspacePage({
   if (meshLoading) return <div>Loading...</div>;
 
   return (
-    <div className="w-full h-svh">
+    <div className="w-full h-svh relative">
       <WorkspaceValuesMenu
         workspaceData={workspaceData}
         geometries={geometries}
@@ -139,27 +191,13 @@ export default function WorkspacePage({
               return (
                 <Cube
                   key={geometry.id}
-                  position={
-                    [
-                      geometry.pos_x,
-                      geometry.pos_y,
-                      geometry.pos_z,
-                    ] as unknown as Vector3
-                  }
-                  rotation={
-                    [
-                      geometry.rot_x,
-                      geometry.rot_y,
-                      geometry.rot_z,
-                    ] as unknown as Euler
-                  }
-                  width={(geometry.mesh_data as { width: number }).width}
-                  height={(geometry.mesh_data as { height: number }).height}
-                  depth={(geometry.mesh_data as { depth: number }).depth}
-                  colour={geometry.colour}
+                  data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
                   onClick={() => setSelectedGeometry(geometry)}
+                  onPivotChange={(position, rotation, scale) => {
+                    console.log("Position change", position, rotation, scale);
+                  }}
                 />
               );
             case "sphere":
@@ -180,15 +218,9 @@ export default function WorkspacePage({
                       geometry.rot_z,
                     ] as unknown as Euler
                   }
-                  widthSegments={
-                    (geometry.mesh_data as { widthSegments: number })
-                      .widthSegments
-                  }
-                  heightSegments={
-                    (geometry.mesh_data as { heightSegments: number })
-                      .heightSegments
-                  }
-                  radius={(geometry.mesh_data as { radius: number }).radius}
+                  widthSegments={geometry.width_segments}
+                  heightSegments={geometry.height_segments}
+                  radius={geometry.radius}
                   colour={geometry.colour}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}

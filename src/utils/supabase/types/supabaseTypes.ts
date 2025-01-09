@@ -11,66 +11,150 @@ export type Database = {
     Tables: {
       Mesh: {
         Row: {
+          arc: number | null
+          cap_segments: number | null
           colour: string | null
           created_at: string
           created_by: string
+          depth: number | null
+          depth_segments: number | null
+          height: number | null
+          height_segments: number | null
           id: string
+          inner_radius: number | null
           layer_name: string | null
-          mesh_data: Json
+          length: number | null
+          open_ended: boolean | null
+          outer_radius: number | null
+          p: number | null
+          phi_length: number | null
+          phi_segments: number | null
+          phi_start: number | null
           pos_x: number | null
           pos_y: number | null
           pos_z: number | null
+          q: number | null
+          radial_segments: number | null
+          radius: number | null
+          radius_bottom: number | null
+          radius_top: number | null
           rot_x: number | null
           rot_y: number | null
           rot_z: number | null
+          scale_x: number | null
+          scale_y: number | null
+          scale_z: number | null
+          theta_length: number | null
+          theta_segments: number | null
+          theta_start: number | null
+          tube: number | null
+          tubular_segments: number | null
           type: string | null
+          width: number | null
+          width_segments: number | null
           wireframe: boolean | null
           workspace_id: string
         }
         Insert: {
+          arc?: number | null
+          cap_segments?: number | null
           colour?: string | null
           created_at?: string
           created_by: string
+          depth?: number | null
+          depth_segments?: number | null
+          height?: number | null
+          height_segments?: number | null
           id?: string
+          inner_radius?: number | null
           layer_name?: string | null
-          mesh_data: Json
+          length?: number | null
+          open_ended?: boolean | null
+          outer_radius?: number | null
+          p?: number | null
+          phi_length?: number | null
+          phi_segments?: number | null
+          phi_start?: number | null
           pos_x?: number | null
           pos_y?: number | null
           pos_z?: number | null
+          q?: number | null
+          radial_segments?: number | null
+          radius?: number | null
+          radius_bottom?: number | null
+          radius_top?: number | null
           rot_x?: number | null
           rot_y?: number | null
           rot_z?: number | null
+          scale_x?: number | null
+          scale_y?: number | null
+          scale_z?: number | null
+          theta_length?: number | null
+          theta_segments?: number | null
+          theta_start?: number | null
+          tube?: number | null
+          tubular_segments?: number | null
           type?: string | null
+          width?: number | null
+          width_segments?: number | null
           wireframe?: boolean | null
           workspace_id?: string
         }
         Update: {
+          arc?: number | null
+          cap_segments?: number | null
           colour?: string | null
           created_at?: string
           created_by?: string
+          depth?: number | null
+          depth_segments?: number | null
+          height?: number | null
+          height_segments?: number | null
           id?: string
+          inner_radius?: number | null
           layer_name?: string | null
-          mesh_data?: Json
+          length?: number | null
+          open_ended?: boolean | null
+          outer_radius?: number | null
+          p?: number | null
+          phi_length?: number | null
+          phi_segments?: number | null
+          phi_start?: number | null
           pos_x?: number | null
           pos_y?: number | null
           pos_z?: number | null
+          q?: number | null
+          radial_segments?: number | null
+          radius?: number | null
+          radius_bottom?: number | null
+          radius_top?: number | null
           rot_x?: number | null
           rot_y?: number | null
           rot_z?: number | null
+          scale_x?: number | null
+          scale_y?: number | null
+          scale_z?: number | null
+          theta_length?: number | null
+          theta_segments?: number | null
+          theta_start?: number | null
+          tube?: number | null
+          tubular_segments?: number | null
           type?: string | null
+          width?: number | null
+          width_segments?: number | null
           wireframe?: boolean | null
           workspace_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "Mesh_created_by_fkey"
+            foreignKeyName: "mesh_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "Profile"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "Mesh_workspace_id_fkey"
+            foreignKeyName: "mesh_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "Workspace"
@@ -109,6 +193,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          mesh_counts: Json | null
           owner_id: string
           updated_at: string | null
           workspace_name: string | null
@@ -116,6 +201,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          mesh_counts?: Json | null
           owner_id?: string
           updated_at?: string | null
           workspace_name?: string | null
@@ -123,6 +209,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          mesh_counts?: Json | null
           owner_id?: string
           updated_at?: string | null
           workspace_name?: string | null

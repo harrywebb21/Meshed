@@ -2,10 +2,10 @@ import { PivotControls } from "@react-three/drei";
 import { MeshProps, Vector3, Euler } from "@react-three/fiber";
 import React from "react";
 
-interface SphereProps extends MeshProps {
-  radius: number | null;
-  heightSegments: number | null;
-  widthSegments: number | null;
+interface CubeProps extends MeshProps {
+  width: number;
+  height: number;
+  depth: number;
   colour: string | null;
   position: Vector3;
   rotation: Euler;
@@ -16,16 +16,16 @@ interface SphereProps extends MeshProps {
   showControls?: boolean;
 }
 
-export const Sphere = ({
-  radius = 1,
-  heightSegments = 32,
-  widthSegments = 32,
-  colour = "#ffffff",
+export const Cube = ({
+  width,
+  height,
+  depth,
+  colour,
   wireframe = false,
   onClick,
   showControls = false,
   ...props
-}: SphereProps) => {
+}: CubeProps) => {
   return (
     <PivotControls
       anchor={[0, 0, 0]}
@@ -38,9 +38,7 @@ export const Sphere = ({
       disableSliders={!showControls}
     >
       <mesh {...props} onClick={onClick}>
-        <sphereGeometry
-          args={[radius ?? 1, widthSegments ?? 32, heightSegments ?? 32]}
-        />
+        <cylinderGeometry args={[width, height, depth]} />
         <meshStandardMaterial
           color={colour || undefined}
           wireframe={wireframe}

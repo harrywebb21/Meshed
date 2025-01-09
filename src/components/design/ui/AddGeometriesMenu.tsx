@@ -1,29 +1,51 @@
-import { CubeMeshData, SphereMeshData } from "@/utils/types";
+import { CubeGeometry, SphereGeometry } from "@/utils/types";
 import { TbCube, TbSphere } from "react-icons/tb";
 
 interface AddGeometriesMenuProps {
-  onCreateGeometry: (newGeometry: CubeMeshData | SphereMeshData) => void;
+  onCreateGeometry: (newGeometry: CubeGeometry | SphereGeometry) => void;
 }
 
 export default function AddGeometriesMenu({
   onCreateGeometry,
 }: AddGeometriesMenuProps) {
   const handleCreateCubeGeometry = () => {
-    const newGeometry: CubeMeshData = {
+    const newGeometry: CubeGeometry = {
       type: "cube",
       width: 1,
       height: 1,
       depth: 1,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
     };
     onCreateGeometry(newGeometry);
   };
 
   const handleCreateSphereGeometry = () => {
-    const newGeometry: SphereMeshData = {
+    const newGeometry: SphereGeometry = {
       type: "sphere",
       radius: 1,
-      widthSegments: 8,
-      heightSegments: 6,
+      widthSegments: 32,
+      heightSegments: 32,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
     };
     onCreateGeometry(newGeometry);
   };

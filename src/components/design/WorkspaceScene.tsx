@@ -25,7 +25,7 @@ export default function WorkspaceScene({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <Canvas>
+    <Canvas gl={{ toneMapping: THREE.NoToneMapping }}>
       <ambientLight intensity={5} />
       <spotLight
         position={[1, 1, 10]}

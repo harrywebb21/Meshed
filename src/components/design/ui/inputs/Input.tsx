@@ -21,6 +21,10 @@ export default function Input({
   returnValue,
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [previousValue, setPreviousValue] = useState<string | number | boolean>(
+    value ?? ""
+  );
 
   return (
     <>
@@ -42,10 +46,12 @@ export default function Input({
       ) : (
         <div
           className={`${
-            isFocused
-              ? "border border-primary-green border-"
-              : "border border-transparent"
-          } bg-primary-gray-950 rounded-md flex items-center gap-2 pl-2 w-full `}
+            isFocused && isEmpty
+              ? "border-red-500"
+              : isFocused
+              ? " border-primary-green "
+              : " border-transparent"
+          }  bg-primary-gray-950 rounded-md flex items-center gap-2 pl-2 w-full border`}
         >
           <label className="text-neutral-600">{label}</label>
           <input
@@ -59,12 +65,26 @@ export default function Input({
                 ? "appearance-none w-full [&::-webkit-color-swatch]:appearance:none [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-sm [&::-moz-color-swatch]:appearance:none [&::-ms-color-swatch]:appearance:none"
                 : " "
             } bg-transparent p-1 outline-none text-white shadow-md`}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={() => {
+              setIsFocused(true);
+              setPreviousValue(value ?? "");
+            }}
+            onBlur={(e) => {
+              setIsFocused(false);
+              if (e.target.value === "") {
+                returnValue(previousValue);
+                setIsEmpty(false);
+              }
+            }}
             value={typeof value === "boolean" ? value.toString() : value}
             onChange={(e) => {
               onChange(e);
               returnValue(e.target.value);
+              if (e.target.value === "") {
+                setIsEmpty(true);
+              } else {
+                setIsEmpty(false);
+              }
             }}
           />
         </div>
@@ -91,9 +111,7 @@ export function Dropdown({ label, value, options, onChange }: DropdownProps) {
   return (
     <div
       className={`${
-        isOpened
-          ? "border-primary-green rounded-br-none "
-          : "border-transparent"
+        isOpened ? "border-primary-green  " : "border-transparent"
       }  bg-primary-gray-950 rounded-md flex items-center gap-2 pl-2 w-full border `}
     >
       <label className="text-neutral-600">{label}</label>

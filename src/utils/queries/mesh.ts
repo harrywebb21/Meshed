@@ -1,25 +1,10 @@
 import { createClient } from "../supabase/client";
 import { Mesh } from "../supabase/types/dbTypes";
-import { CubeMeshData } from "../types";
 // import { CubeMeshData, SphereMesh } from "../types";
 
 const supabase = createClient();
 export async function addMesh(meshData: Mesh): Promise<void> {
-  const { data, error } = await supabase.from("Mesh").insert([
-    {
-      mesh_data: meshData.mesh_data,
-      workspace_id: meshData.workspace_id,
-      created_by: meshData.created_by,
-      layer_name: meshData.layer_name,
-      pos_x: meshData.pos_x,
-      pos_y: meshData.pos_y,
-      pos_z: meshData.pos_z,
-      rot_x: meshData.rot_x,
-      rot_y: meshData.rot_y,
-      rot_z: meshData.rot_z,
-      type: meshData.type,
-    },
-  ]);
+  const { data, error } = await supabase.from("Mesh").insert([meshData]);
   if (data) {
     console.log(data);
   }
@@ -48,8 +33,10 @@ export async function updateMesh(
   rot_y?: number | null,
   rot_z?: number | null,
   colour?: string | null,
-  wireframe?: boolean | null,
-  mesh_data?: CubeMeshData | null
+  scale_x?: number | null,
+  scale_y?: number | null,
+  scale_z?: number | null,
+  wireframe?: boolean | null
 ): Promise<void> {
   const { data, error } = await supabase
     .from("Mesh")
@@ -61,7 +48,9 @@ export async function updateMesh(
       rot_x,
       rot_y,
       rot_z,
-      mesh_data,
+      scale_x,
+      scale_y,
+      scale_z,
       wireframe,
     })
     .eq("id", meshId);

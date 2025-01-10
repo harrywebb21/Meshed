@@ -1,5 +1,6 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
 // import { useControls } from "leva";
 
 export default function Scene({ children }: { children?: React.ReactNode }) {
@@ -18,7 +19,7 @@ export default function Scene({ children }: { children?: React.ReactNode }) {
   // });
 
   return (
-    <Canvas>
+    <Canvas gl={{ toneMapping: THREE.NoToneMapping }}>
       <ambientLight intensity={5} />
       <spotLight
         position={[1, 1, 10]}

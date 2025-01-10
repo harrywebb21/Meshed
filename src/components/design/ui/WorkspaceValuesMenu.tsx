@@ -14,27 +14,33 @@ export default function WorkspaceValuesMenu({
   returnSelectedGeometry,
 }: WorkspaceValuesMenuProps) {
   return (
-    <div className=" fixed top-4 left-4 z-10 flex flex-col gap-2 py-2 px-4 shadow-md bg-primary-gray-950 rounded-xl">
-      <h1>{workspaceData?.workspace_name}</h1>
-      {geometries.map((geometry) => (
-        <button
-          key={geometry.id}
-          className=" bg-primary-gray-900 p-2 rounded-lg shadow-md flex gap-2 items-center capitalize"
-          onClick={() => returnSelectedGeometry(geometry)}
-        >
-          {(() => {
-            switch (geometry.type) {
-              case "cube":
-                return <TbCube size={12} />;
-              case "sphere":
-                return <TbSphere size={12} />;
-              default:
-                return null;
-            }
-          })()}
-          {geometry.layer_name}
-        </button>
-      ))}
+    <div className=" fixed top-4 left-4 z-10 flex flex-col h-fit p-2  gap-2 shadow-md bg-primary-gray-950 rounded-xl bottom-4 overflow-y-auto">
+      <h1 className=" sticky top-0 bg-primary-gray-900 shadow-md p-2 rounded-lg text-lg font-bold capitalize">
+        {workspaceData?.workspace_name}
+      </h1>
+      {geometries.length !== 0 && (
+        <div className="flex flex-col  gap-2 overflow-y-auto">
+          {geometries.map((geometry) => (
+            <button
+              key={geometry.id}
+              className=" bg-primary-gray-900 p-2 rounded-lg shadow-md flex gap-2 items-center capitalize"
+              onClick={() => returnSelectedGeometry(geometry)}
+            >
+              {(() => {
+                switch (geometry.type) {
+                  case "cube":
+                    return <TbCube size={12} />;
+                  case "sphere":
+                    return <TbSphere size={12} />;
+                  default:
+                    return null;
+                }
+              })()}
+              {geometry.layer_name}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

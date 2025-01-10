@@ -1,3 +1,4 @@
+"use client";
 import { Float } from "@react-three/drei";
 import { MeshTransmissionMaterial } from "@react-three/drei/core/MeshTransmissionMaterial";
 import { useRef } from "react";
@@ -30,11 +31,11 @@ export function GlassBall(props: GlassBallProps) {
           </mesh>
           <mesh rotation={[0, -2, 0]}>
             <boxGeometry args={[1, 1, 1]} />
-            <meshBasicMaterial color={"red"} />
+            <meshBasicMaterial color={"lime"} />
           </mesh>
           <mesh rotation={[-2, 0, 0]}>
             <boxGeometry args={[1, 1, 1]} />
-            <meshBasicMaterial color={"orange"} />
+            <meshBasicMaterial color={"pink"} />
           </mesh>
         </Float>
       </group>

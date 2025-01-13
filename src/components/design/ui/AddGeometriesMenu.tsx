@@ -1,8 +1,36 @@
-import { CubeGeometry, SphereGeometry } from "@/utils/types";
-import { TbCube, TbSphere } from "react-icons/tb";
+import {
+  CapsuleGeometry,
+  ConeGeometry,
+  CubeGeometry,
+  CylinderGeometry,
+  PlaneGeometry,
+  SphereGeometry,
+  TorusGeometry,
+  TorusKnotGeometry,
+} from "@/utils/types";
+import { FaRegCircleDot } from "react-icons/fa6";
+import {
+  TbBorderAll,
+  TbCapsule,
+  TbCircles,
+  TbCone,
+  TbCube,
+  TbCylinder,
+  TbSphere,
+} from "react-icons/tb";
 
 interface AddGeometriesMenuProps {
-  onCreateGeometry: (newGeometry: CubeGeometry | SphereGeometry) => void;
+  onCreateGeometry: (
+    newGeometry:
+      | CubeGeometry
+      | SphereGeometry
+      | CylinderGeometry
+      | PlaneGeometry
+      | TorusGeometry
+      | ConeGeometry
+      | CapsuleGeometry
+      | TorusKnotGeometry
+  ) => void;
 }
 
 export default function AddGeometriesMenu({
@@ -50,6 +78,145 @@ export default function AddGeometriesMenu({
     onCreateGeometry(newGeometry);
   };
 
+  const handleCreateCylinderGeometry = () => {
+    const newGeometry: CylinderGeometry = {
+      type: "cylinder",
+      radiusTop: 1,
+      radiusBottom: 1,
+      height: 1,
+      radialSegments: 32,
+      heightSegments: 32,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
+    };
+    onCreateGeometry(newGeometry);
+  };
+
+  const handleCreatePlaneGeometry = () => {
+    const newGeometry: PlaneGeometry = {
+      type: "plane",
+      width: 1,
+      height: 1,
+      widthSegments: 1,
+      heightSegments: 1,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
+    };
+    onCreateGeometry(newGeometry);
+  };
+
+  const handleCreateTorusGeometry = () => {
+    const newGeometry: TorusGeometry = {
+      type: "torus",
+      radius: 1,
+      tube: 0.4,
+      radialSegments: 8,
+      tubularSegments: 6,
+      arc: Math.PI * 2,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
+    };
+    onCreateGeometry(newGeometry);
+  };
+
+  const handleCreateConeGeometry = () => {
+    const newGeometry: ConeGeometry = {
+      type: "cone",
+      radius: 1,
+      height: 1,
+      radialSegments: 8,
+      heightSegments: 6,
+      openEnded: false,
+      thetaStart: 0,
+      thetaLength: Math.PI * 2,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
+    };
+    onCreateGeometry(newGeometry);
+  };
+
+  const handleCreateCapsuleGeometry = () => {
+    const newGeometry: CapsuleGeometry = {
+      type: "capsule",
+      radius: 1,
+      length: 1,
+      radialSegments: 8,
+      capSegments: 6,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
+    };
+    onCreateGeometry(newGeometry);
+  };
+
+  const handleCreateTorusKnotGeometry = () => {
+    const newGeometry: TorusKnotGeometry = {
+      type: "torusKnot",
+      radius: 1,
+      tube: 0.4,
+      tubularSegments: 8,
+      radialSegments: 6,
+      p: 2,
+      q: 3,
+      pos_x: 0,
+      pos_y: 0,
+      pos_z: 0,
+      rot_x: 0,
+      rot_y: 0,
+      rot_z: 0,
+      scale_x: 1,
+      scale_y: 1,
+      scale_z: 1,
+      colour: "#ffffff",
+      wireframe: false,
+    };
+    onCreateGeometry(newGeometry);
+  };
+
   return (
     <div className=" fixed top-4 -translate-x-1/2 left-1/2 z-10 flex  gap-2 p-2 shadow-md bg-primary-gray-950 rounded-xl w-fit">
       <button
@@ -63,6 +230,42 @@ export default function AddGeometriesMenu({
         onClick={handleCreateSphereGeometry}
       >
         <TbSphere />
+      </button>
+      <button
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        onClick={handleCreateCylinderGeometry}
+      >
+        <TbCylinder />
+      </button>
+      <button
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        onClick={handleCreatePlaneGeometry}
+      >
+        <TbBorderAll />
+      </button>
+      <button
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        onClick={handleCreateTorusGeometry}
+      >
+        <FaRegCircleDot />
+      </button>
+      <button
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        onClick={handleCreateConeGeometry}
+      >
+        <TbCone />
+      </button>
+      <button
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        onClick={handleCreateCapsuleGeometry}
+      >
+        <TbCapsule />
+      </button>
+      <button
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        onClick={handleCreateTorusKnotGeometry}
+      >
+        <TbCircles />
       </button>
     </div>
   );

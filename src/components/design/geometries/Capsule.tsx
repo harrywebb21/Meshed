@@ -3,7 +3,7 @@ import { PivotControls } from "@react-three/drei";
 import { MeshProps, Vector3, Euler } from "@react-three/fiber";
 import React from "react";
 
-interface CylinderProps extends MeshProps {
+interface CapsuleProps extends MeshProps {
   data: Mesh;
   onClick?: () => void;
   showPivot?: boolean;
@@ -12,17 +12,18 @@ interface CylinderProps extends MeshProps {
   showControls?: boolean;
 }
 
-export const Cylinder = ({
+export const Capsule = ({
   data,
   onClick,
   showControls = false,
   ...props
-}: CylinderProps) => {
+}: CapsuleProps) => {
   return (
     <PivotControls
       anchor={[0, 0, 0]}
       axisColors={["#FF1158", "#05FF69", "#04A5FF"]}
       hoveredColor={"white"}
+      scale={1.5}
       visible={showControls}
       disableAxes={!showControls}
       disableRotations={!showControls}
@@ -36,14 +37,12 @@ export const Cylinder = ({
         position={[data.pos_x ?? 0, data.pos_y ?? 0, data.pos_z ?? 0]}
         rotation={[data.rot_x ?? 0, data.rot_y ?? 0, data.rot_z ?? 0]}
       >
-        <cylinderGeometry
+        <capsuleGeometry
           args={[
-            data.radius_top ?? 1,
-            data.radius_bottom ?? 0,
-            data.height ?? 1,
-            data.radial_segments ?? 32,
-            data.height_segments ?? 1,
-            data.open_ended ?? false,
+            data.radius ?? 1,
+            data.length ?? 1,
+            data.cap_segments ?? 8,
+            data.radial_segments ?? 6,
           ]}
         />
         <meshStandardMaterial

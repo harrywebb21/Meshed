@@ -7,14 +7,29 @@ import { useAuthUser } from "@/utils/hooks/useAuthUser";
 import { useGetProfile } from "@/utils/hooks/useGetProfile";
 import { addMesh, getMeshes } from "@/utils/queries/mesh";
 import AddGeometriesMenu from "@/components/design/ui/AddGeometriesMenu";
-import { Euler, Vector3 } from "three";
 import { useEffect, useState } from "react";
 import { getWorkspaceById } from "@/utils/queries/workspace";
 import ValuesMenu from "@/components/design/ui/ValuesMenu";
 import WorkspaceValuesMenu from "@/components/design/ui/WorkspaceValuesMenu";
 import { createClient } from "@/utils/supabase/client";
 import { Sphere } from "@/components/design/geometries/Sphere";
-import { CubeGeometry, SphereGeometry } from "@/utils/types";
+import {
+  CapsuleGeometry,
+  ConeGeometry,
+  CubeGeometry,
+  CylinderGeometry,
+  PlaneGeometry,
+  RingGeometry,
+  SphereGeometry,
+  TorusGeometry,
+  TorusKnotGeometry,
+} from "@/utils/types";
+import { Cylinder } from "@/components/design/geometries/Cylinder";
+import { Plane } from "@/components/design/geometries/Plane";
+import { Torus } from "@/components/design/geometries/Torus";
+import { Cone } from "@/components/design/geometries/Cone";
+import { Capsule } from "@/components/design/geometries/Capsule";
+import { TorusKnot } from "@/components/design/geometries/TorusKnot";
 
 export default function WorkspacePage({
   params,
@@ -107,7 +122,18 @@ export default function WorkspacePage({
   }, [meshData]);
 
   // FUNCTIONS / HANDLERS
-  const handleCreateGeometry = (newGeometry: CubeGeometry | SphereGeometry) => {
+  const handleCreateGeometry = (
+    newGeometry:
+      | CubeGeometry
+      | SphereGeometry
+      | CylinderGeometry
+      | PlaneGeometry
+      | TorusGeometry
+      | ConeGeometry
+      | CapsuleGeometry
+      | RingGeometry
+      | TorusKnotGeometry
+  ) => {
     try {
       const meshCounts: { [key: string]: number } =
         (workspaceData?.mesh_counts as { [key: string]: number }) ?? {};
@@ -132,35 +158,67 @@ export default function WorkspacePage({
         rot_y: newGeometry.rot_y ?? null,
         rot_z: newGeometry.rot_z ?? null,
         wireframe: newGeometry.wireframe,
-        arc: null,
-        cap_segments: null,
-        depth: null,
-        height: null,
-        length: null,
-        radius: null,
-        radius_bottom: null,
-        radius_top: null,
-        radial_segments: null,
-        tube: null,
-        tubular_segments: null,
-        width: null,
-        width_segments: null,
-        height_segments: null,
-        depth_segments: null,
-        inner_radius: null,
-        open_ended: null,
-        outer_radius: null,
-        p: null,
-        q: null,
-        theta_length: null,
-        theta_start: null,
-        theta_segments: null,
-        phi_length: null,
-        phi_segments: null,
-        phi_start: null,
-        scale_x: null,
-        scale_y: null,
-        scale_z: null,
+        arc: "arc" in newGeometry ? newGeometry.arc ?? Math.PI * 2 : null,
+        cap_segments:
+          "capSegments" in newGeometry ? newGeometry.capSegments ?? 8 : null,
+        depth: "depth" in newGeometry ? newGeometry.depth ?? 1 : null,
+        height: "height" in newGeometry ? newGeometry.height ?? 1 : null,
+        length: "length" in newGeometry ? newGeometry.length ?? 1 : null,
+        radius: "radius" in newGeometry ? newGeometry.radius ?? 1 : null,
+        radius_bottom:
+          "radiusBottom" in newGeometry
+            ? newGeometry.radiusBottom ?? null
+            : null,
+        radius_top:
+          "radiusTop" in newGeometry ? newGeometry.radiusTop ?? null : null,
+        radial_segments:
+          "radialSegments" in newGeometry
+            ? newGeometry.radialSegments ?? 8
+            : null,
+        tube: "tube" in newGeometry ? newGeometry.tube ?? 1 : null,
+        tubular_segments:
+          "tubularSegments" in newGeometry
+            ? newGeometry.tubularSegments ?? 32
+            : null,
+        width: "width" in newGeometry ? newGeometry.width ?? 1 : null,
+        width_segments:
+          "widthSegments" in newGeometry
+            ? newGeometry.widthSegments ?? 32
+            : null,
+        height_segments:
+          "heightSegments" in newGeometry
+            ? newGeometry.heightSegments ?? 32
+            : null,
+        depth_segments:
+          "depthSegments" in newGeometry
+            ? newGeometry.depthSegments ?? 32
+            : null,
+        inner_radius:
+          "innerRadius" in newGeometry ? newGeometry.innerRadius ?? null : null,
+        open_ended:
+          "openEnded" in newGeometry ? newGeometry.openEnded ?? null : null,
+        outer_radius:
+          "outerRadius" in newGeometry ? newGeometry.outerRadius ?? null : null,
+        p: "p" in newGeometry ? newGeometry.p ?? 2 : null,
+        q: "q" in newGeometry ? newGeometry.q ?? 3 : null,
+        theta_length:
+          "thetaLength" in newGeometry ? newGeometry.thetaLength ?? 1 : null,
+        theta_start:
+          "thetaStart" in newGeometry ? newGeometry.thetaStart ?? 0 : null,
+        theta_segments:
+          "thetaSegments" in newGeometry
+            ? newGeometry.thetaSegments ?? 8
+            : null,
+        phi_length:
+          "phiLength" in newGeometry
+            ? newGeometry.phiLength ?? Math.PI * 2
+            : null,
+        phi_segments:
+          "phiSegments" in newGeometry ? newGeometry.phiSegments ?? 8 : null,
+        phi_start: "phiStart" in newGeometry ? newGeometry.phiStart ?? 0 : null,
+        scale_x: newGeometry.scale_x ?? null,
+        scale_y: newGeometry.scale_y ?? null,
+        scale_z: newGeometry.scale_z ?? null,
       };
 
       newMeshMutation.mutate(newMesh);
@@ -195,33 +253,73 @@ export default function WorkspacePage({
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
                   onClick={() => setSelectedGeometry(geometry)}
-                  onPivotChange={(position, rotation, scale) => {
-                    console.log("Position change", position, rotation, scale);
-                  }}
                 />
               );
             case "sphere":
               return (
                 <Sphere
                   key={geometry.id}
-                  position={
-                    [
-                      geometry.pos_x,
-                      geometry.pos_y,
-                      geometry.pos_z,
-                    ] as unknown as Vector3
-                  }
-                  rotation={
-                    [
-                      geometry.rot_x,
-                      geometry.rot_y,
-                      geometry.rot_z,
-                    ] as unknown as Euler
-                  }
-                  widthSegments={geometry.width_segments}
-                  heightSegments={geometry.height_segments}
-                  radius={geometry.radius}
-                  colour={geometry.colour}
+                  data={geometry}
+                  wireframe={geometry.wireframe ?? false}
+                  showControls={selectedGeometry?.id === geometry.id}
+                  onClick={() => setSelectedGeometry(geometry)}
+                />
+              );
+            case "cylinder":
+              return (
+                <Cylinder
+                  key={geometry.id}
+                  data={geometry}
+                  wireframe={geometry.wireframe ?? false}
+                  showControls={selectedGeometry?.id === geometry.id}
+                  onClick={() => setSelectedGeometry(geometry)}
+                />
+              );
+            case "plane":
+              return (
+                <Plane
+                  key={geometry.id}
+                  data={geometry}
+                  wireframe={geometry.wireframe ?? false}
+                  showControls={selectedGeometry?.id === geometry.id}
+                  onClick={() => setSelectedGeometry(geometry)}
+                />
+              );
+            case "torus":
+              return (
+                <Torus
+                  key={geometry.id}
+                  data={geometry}
+                  wireframe={geometry.wireframe ?? false}
+                  showControls={selectedGeometry?.id === geometry.id}
+                  onClick={() => setSelectedGeometry(geometry)}
+                />
+              );
+            case "cone":
+              return (
+                <Cone
+                  key={geometry.id}
+                  data={geometry}
+                  wireframe={geometry.wireframe ?? false}
+                  showControls={selectedGeometry?.id === geometry.id}
+                  onClick={() => setSelectedGeometry(geometry)}
+                />
+              );
+            case "capsule":
+              return (
+                <Capsule
+                  key={geometry.id}
+                  data={geometry}
+                  wireframe={geometry.wireframe ?? false}
+                  showControls={selectedGeometry?.id === geometry.id}
+                  onClick={() => setSelectedGeometry(geometry)}
+                />
+              );
+            case "torusKnot":
+              return (
+                <TorusKnot
+                  key={geometry.id}
+                  data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
                   onClick={() => setSelectedGeometry(geometry)}

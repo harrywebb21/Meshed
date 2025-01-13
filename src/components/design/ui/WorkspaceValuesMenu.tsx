@@ -1,6 +1,15 @@
 "use client";
 import { Mesh, Workspace } from "@/utils/supabase/types/dbTypes";
-import { TbCube, TbSphere } from "react-icons/tb";
+import { FaRegCircleDot } from "react-icons/fa6";
+import {
+  TbBorderAll,
+  TbCapsule,
+  TbCircles,
+  TbCone,
+  TbCube,
+  TbCylinder,
+  TbSphere,
+} from "react-icons/tb";
 
 interface WorkspaceValuesMenuProps {
   workspaceData?: Workspace;
@@ -32,6 +41,18 @@ export default function WorkspaceValuesMenu({
                     return <TbCube size={12} />;
                   case "sphere":
                     return <TbSphere size={12} />;
+                  case "cylinder":
+                    return <TbCylinder size={12} />;
+                  case "plane":
+                    return <TbBorderAll size={12} />;
+                  case "torus":
+                    return <FaRegCircleDot size={12} />;
+                  case "cone":
+                    return <TbCone size={12} />;
+                  case "capsule":
+                    return <TbCapsule size={12} />;
+                  case "torusKnot":
+                    return <TbCircles size={12} />;
                   default:
                     return null;
                 }

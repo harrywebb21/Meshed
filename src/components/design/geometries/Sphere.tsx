@@ -1,14 +1,10 @@
+import { Mesh } from "@/utils/supabase/types/dbTypes";
 import { PivotControls } from "@react-three/drei";
 import { MeshProps, Vector3, Euler } from "@react-three/fiber";
 import React from "react";
 
 interface SphereProps extends MeshProps {
-  radius: number | null;
-  heightSegments: number | null;
-  widthSegments: number | null;
-  colour: string | null;
-  position: Vector3;
-  rotation: Euler;
+  data: Mesh;
   onClick?: () => void;
   showPivot?: boolean;
   onPositionChange?: (position: Vector3, rotation: Euler) => void;
@@ -17,11 +13,7 @@ interface SphereProps extends MeshProps {
 }
 
 export const Sphere = ({
-  radius = 1,
-  heightSegments = 32,
-  widthSegments = 32,
-  colour = "#ffffff",
-  wireframe = false,
+  data,
   onClick,
   showControls = false,
   ...props
@@ -37,13 +29,23 @@ export const Sphere = ({
       disableScaling={!showControls}
       disableSliders={!showControls}
     >
-      <mesh {...props} onClick={onClick}>
+      <mesh
+        {...props}
+        onClick={onClick}
+        scale={[data.scale_x ?? 1, data.scale_y ?? 1, data.scale_z ?? 1]}
+        position={[data.pos_x ?? 0, data.pos_y ?? 0, data.pos_z ?? 0]}
+        rotation={[data.rot_x ?? 0, data.rot_y ?? 0, data.rot_z ?? 0]}
+      >
         <sphereGeometry
-          args={[radius ?? 1, widthSegments ?? 32, heightSegments ?? 32]}
+          args={[
+            data.radius ?? 1,
+            data.width_segments ?? 32,
+            data.height_segments ?? 32,
+          ]}
         />
         <meshStandardMaterial
-          color={colour || undefined}
-          wireframe={wireframe}
+          color={data.colour || undefined}
+          wireframe={data.wireframe ?? false}
         />
       </mesh>
     </PivotControls>

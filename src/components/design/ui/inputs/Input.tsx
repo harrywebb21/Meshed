@@ -10,7 +10,8 @@ interface InputProps {
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>
   ) => void;
-  returnValue: (value: string | number | boolean) => void;
+  returnValue?: (value: string | number | boolean) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
@@ -19,6 +20,7 @@ export default function Input({
   value,
   onChange,
   returnValue,
+  onBlur,
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -40,7 +42,9 @@ export default function Input({
             onChange({
               target: { value },
             } as React.ChangeEvent<HTMLSelectElement>);
-            returnValue(value === "true");
+            if (returnValue) {
+              returnValue(value === "true");
+            }
           }}
         />
       ) : (
@@ -70,16 +74,23 @@ export default function Input({
               setPreviousValue(value ?? "");
             }}
             onBlur={(e) => {
+              if (onBlur) {
+                onBlur(e);
+              }
               setIsFocused(false);
               if (e.target.value === "") {
-                returnValue(previousValue);
+                if (returnValue) {
+                  returnValue(previousValue);
+                }
                 setIsEmpty(false);
               }
             }}
             value={typeof value === "boolean" ? value.toString() : value}
             onChange={(e) => {
               onChange(e);
-              returnValue(e.target.value);
+              if (returnValue) {
+                returnValue(e.target.value);
+              }
               if (e.target.value === "") {
                 setIsEmpty(true);
               } else {

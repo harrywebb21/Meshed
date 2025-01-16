@@ -26,32 +26,13 @@ export async function getMeshes(workspaceId: string): Promise<Mesh[]> {
 
 export async function updateMesh(
   meshId: string,
-  pos_x?: number | null,
-  pos_y?: number | null,
-  pos_z?: number | null,
-  rot_x?: number | null,
-  rot_y?: number | null,
-  rot_z?: number | null,
-  colour?: string | null,
-  scale_x?: number | null,
-  scale_y?: number | null,
-  scale_z?: number | null,
-  wireframe?: boolean | null
+  meshData: Partial<Mesh>
 ): Promise<void> {
   const { data, error } = await supabase
     .from("Mesh")
     .update({
-      colour,
-      pos_x,
-      pos_y,
-      pos_z,
-      rot_x,
-      rot_y,
-      rot_z,
-      scale_x,
-      scale_y,
-      scale_z,
-      wireframe,
+      ...meshData,
+      updated_at: new Date(),
     })
     .eq("id", meshId);
   if (data) {

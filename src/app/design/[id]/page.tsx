@@ -121,6 +121,9 @@ export default function WorkspacePage({
     }
   }, [meshData]);
 
+  useEffect(() => {
+    console.log("selectedGeometry", selectedGeometry);
+  }, [selectedGeometry]);
   // FUNCTIONS / HANDLERS
   const handleCreateGeometry = (
     newGeometry:
@@ -236,6 +239,7 @@ export default function WorkspacePage({
       <WorkspaceValuesMenu
         workspaceData={workspaceData}
         geometries={geometries}
+        selectedGeometry={selectedGeometry}
         returnSelectedGeometry={setSelectedGeometry}
       />
       {selectedGeometry && (

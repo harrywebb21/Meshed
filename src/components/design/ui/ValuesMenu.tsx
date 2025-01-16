@@ -3,6 +3,8 @@ import Input from "./inputs/Input";
 import { Mesh } from "@/utils/supabase/types/dbTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateMesh } from "@/utils/queries/mesh";
+import useTransform from "@/utils/hooks/mesh-hooks/useTransform";
+import TransformInputs from "./inputs/TransformInputs";
 
 interface ValuesMenuProps {
   meshData?: Mesh | null;
@@ -10,38 +12,57 @@ interface ValuesMenuProps {
 }
 
 export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
-  const [positionX, setPositionX] = useState<number>(meshData?.pos_x || 0);
-  const [positionY, setPositionY] = useState<number>(meshData?.pos_y || 0);
-  const [positionZ, setPositionZ] = useState<number>(meshData?.pos_z || 0);
-  const [rotationX, setRotationX] = useState<number>(meshData?.rot_x || 0);
-  const [rotationY, setRotationY] = useState<number>(meshData?.rot_y || 0);
-  const [rotationZ, setRotationZ] = useState<number>(meshData?.rot_z || 0);
-  const [scaleX, setScaleX] = useState<number>(meshData?.scale_x || 1);
-  const [scaleY, setScaleY] = useState<number>(meshData?.scale_y || 1);
-  const [scaleZ, setScaleZ] = useState<number>(meshData?.scale_z || 1);
+  const { transform, updateTransform } = useTransform({
+    position: {
+      x: meshData?.pos_x || 0,
+      y: meshData?.pos_y || 0,
+      z: meshData?.pos_z || 0,
+    },
+    rotation: {
+      x: meshData?.rot_x || 0,
+      y: meshData?.rot_y || 0,
+      z: meshData?.rot_z || 0,
+    },
+    scale: {
+      x: meshData?.scale_x || 1,
+      y: meshData?.scale_y || 1,
+      z: meshData?.scale_z || 1,
+    },
+  });
+
+  //SHAPES
+  const [width, setWidth] = useState<number>(meshData?.width || 1);
+  const [height, setHeight] = useState<number>(meshData?.height || 1);
+  const [depth, setDepth] = useState<number>(meshData?.depth || 1);
+  const [widthSegments, setWidthSegments] = useState<number>(
+    meshData?.width_segments || 1
+  );
+  const [heightSegments, setHeightSegments] = useState<number>(
+    meshData?.height_segments || 1
+  );
+  const [depthSegments, setDepthSegments] = useState<number>(
+    meshData?.depth_segments || 1
+  );
+
+  //MATERIALS
   const [colour, setColour] = useState<string>(meshData?.colour || "");
   const [wireframe, setWireframe] = useState<boolean>(
     meshData?.wireframe || false
   );
 
+  useEffect(() => {
+    setWidth(meshData?.width || 1);
+    setHeight(meshData?.height || 1);
+    setDepth(meshData?.depth || 1);
+    setColour(meshData?.colour || "");
+    setWireframe(meshData?.wireframe || false);
+  }, [meshData]);
+
   const queryClient = useQueryClient();
 
   const meshUpdateQuery = useMutation({
     mutationFn: async (newMeshData: Partial<Mesh>) => {
-      await updateMesh(
-        meshData!.id,
-        newMeshData.pos_x,
-        newMeshData.pos_y,
-        newMeshData.pos_z,
-        newMeshData.rot_x,
-        newMeshData.rot_y,
-        newMeshData.rot_z,
-        newMeshData.colour,
-        newMeshData.scale_x,
-        newMeshData.scale_y,
-        newMeshData.scale_z,
-        newMeshData.wireframe
-      );
+      await updateMesh(meshData!.id, newMeshData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -60,150 +81,131 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
     setState(value as T);
   };
 
-  useEffect(() => {
-    if (meshData) {
-      setPositionX(meshData?.pos_x ?? 0);
-      setPositionY(meshData?.pos_y ?? 0);
-      setPositionZ(meshData?.pos_z ?? 0);
-      setRotationX(meshData?.rot_x ?? 0);
-      setRotationY(meshData?.rot_y ?? 0);
-      setRotationZ(meshData?.rot_z ?? 0);
-      setColour(meshData?.colour ?? "");
-      setWireframe(meshData?.wireframe ?? false);
-      setScaleX(meshData?.scale_x ?? 1);
-      setScaleY(meshData?.scale_y ?? 1);
-      setScaleZ(meshData?.scale_z ?? 1);
-    }
-  }, [meshData]);
-  useEffect(() => {
+  /*TODO: Fix this useEffect as it is mutating the mesh data everytime we select a new mesh because 
+  meshData changes and updates the states which then triggers the mutation to happen. THIS SHOULD NOT HAPPEN!!!
+  
+  - add all of the types of inputs depending on the type of mesh selected
+  */
+
+  const handleInputMutation = (value: Partial<Mesh>) => {
     if (
-      positionX.toString() === "" ||
-      positionY.toString() === "" ||
-      positionZ.toString() === "" ||
-      rotationX.toString() === "" ||
-      rotationY.toString() === "" ||
-      rotationZ.toString() === "" ||
-      scaleX.toString() === "" ||
-      scaleY.toString() === "" ||
-      scaleZ.toString() === "" ||
-      colour === "" ||
-      wireframe.toString() === ""
+      Object.keys(value).length === 0 ||
+      Object.values(value).filter((v) => v === Number.isNaN(v)).length > 0
     ) {
       return;
     }
-
     meshUpdateQuery.mutate({
-      pos_x: positionX,
-      pos_y: positionY,
-      pos_z: positionZ,
-      rot_x: rotationX,
-      rot_y: rotationY,
-      rot_z: rotationZ,
-      scale_x: scaleX,
-      scale_y: scaleY,
-      scale_z: scaleZ,
-      colour: colour,
-      wireframe: wireframe,
+      ...value,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    positionX,
-    positionY,
-    positionZ,
-    rotationX,
-    rotationY,
-    rotationZ,
-    scaleX,
-    scaleY,
-    scaleZ,
-    colour,
-    wireframe,
-  ]);
+  };
 
   return (
     <div className=" fixed top-4 right-4 z-10 flex flex-col gap-2 p-2 shadow-md bg-primary-gray-950 rounded-xl">
       <h1 className="text-xl font-bold bg-primary-gray-900 p-2 rounded-lg shadow-md capitalize">
         {meshData?.layer_name}
       </h1>
-      <div className=" p-2 bg-primary-gray-900 rounded-lg shadow-md flex flex-col gap-2">
-        <h2 className=" text-sm text-neutral-500">Position</h2>
-        <div className="flex max-w-56 gap-2">
-          <Input
-            label="X"
-            value={positionX}
-            type="number"
-            returnValue={(value) => handleChange(value, setPositionX)}
-            onChange={(e) => handleChange(e.target.value, setPositionX)}
-          />
-          <Input
-            label="Y"
-            value={positionY}
-            type="number"
-            returnValue={(value) => handleChange(value, setPositionY)}
-            onChange={(e) => handleChange(e.target.value, setPositionY)}
-          />
-          <Input
-            label="Z"
-            value={positionZ}
-            type="number"
-            returnValue={(value) => handleChange(value, setPositionZ)}
-            onChange={(e) => handleChange(e.target.value, setPositionZ)}
-          />
-        </div>
-      </div>
-      <div className=" p-2 bg-primary-gray-900 rounded-lg shadow-md flex flex-col gap-2">
-        <h1 className=" text-sm text-neutral-600">Rotation</h1>
-        <div className="flex max-w-56 gap-2">
-          <Input
-            label="X"
-            value={rotationX}
-            type="number"
-            returnValue={(value) => handleChange(value, setRotationX)}
-            onChange={(e) => handleChange(e.target.value, setRotationX)}
-          />
-          <Input
-            label="Y"
-            value={rotationY}
-            type="number"
-            returnValue={(value) => handleChange(value, setRotationY)}
-            onChange={(e) => handleChange(e.target.value, setRotationY)}
-          />
-          <Input
-            label="Z"
-            value={rotationZ}
-            type="number"
-            returnValue={(value) => handleChange(value, setRotationZ)}
-            onChange={(e) => handleChange(e.target.value, setRotationZ)}
-          />
-        </div>
-      </div>
-      <div className=" p-2 bg-primary-gray-900 rounded-lg shadow-md flex flex-col gap-2">
-        <h1 className=" text-sm text-neutral-600">Scale</h1>
-        <div className="flex max-w-56 gap-2">
-          <Input
-            label="X"
-            value={scaleX}
-            type="number"
-            returnValue={(value) => handleChange(value, setScaleX)}
-            onChange={(e) => handleChange(e.target.value, setScaleX)}
-          />
-          <Input
-            label="Y"
-            value={scaleY}
-            type="number"
-            returnValue={(value) => handleChange(value, setScaleY)}
-            onChange={(e) => handleChange(e.target.value, setScaleY)}
-          />
-          <Input
-            label="Z"
-            value={scaleZ}
-            type="number"
-            returnValue={(value) => handleChange(value, setScaleZ)}
-            onChange={(e) => handleChange(e.target.value, setScaleZ)}
-          />
-        </div>
-      </div>
+      <TransformInputs
+        pos_x={transform.position.x}
+        pos_y={transform.position.y}
+        pos_z={transform.position.z}
+        rot_x={transform.rotation.x}
+        rot_y={transform.rotation.y}
+        rot_z={transform.rotation.z}
+        scale_x={transform.scale.x}
+        scale_y={transform.scale.y}
+        scale_z={transform.scale.z}
+        updateTransform={(type, axis, value) =>
+          updateTransform(type, axis, value)
+        }
+        handleInputMutation={handleInputMutation}
+      />
 
+      <div className="  bg-primary-gray-900 rounded-lg shadow-md flex flex-col">
+        <h1 className=" text-sm  bg-neutral-800 w-full p-2 rounded-lg shadow-md">
+          Shape
+        </h1>
+        <div className="p-2">
+          {meshData?.type === "cube" && (
+            <div className="flex flex-col max-w-56 gap-2">
+              <h1 className=" text-sm text-neutral-600">Size</h1>
+              <div className="flex w-full items-center gap-2">
+                <Input
+                  label="H"
+                  value={height}
+                  type="number"
+                  returnValue={(value) => handleChange(value, setHeight)}
+                  onChange={(e) => {
+                    handleChange(e.target.value, setHeight);
+                    handleInputMutation({ height: Number(e.target.value) });
+                  }}
+                />
+                <Input
+                  label="W"
+                  value={width}
+                  type="number"
+                  returnValue={(value) => handleChange(value, setWidth)}
+                  onChange={(e) => {
+                    handleChange(e.target.value, setWidth);
+                    handleInputMutation({ width: Number(e.target.value) });
+                  }}
+                />
+                <Input
+                  label="D"
+                  value={depth}
+                  type="number"
+                  returnValue={(value) => handleChange(value, setDepth)}
+                  onChange={(e) => {
+                    handleChange(e.target.value, setDepth);
+                    handleInputMutation({ depth: Number(e.target.value) });
+                  }}
+                />
+              </div>
+              <h1 className=" text-sm text-neutral-600">Side Segments</h1>
+              <div className="flex w-full items-center gap-2">
+                <Input
+                  label="W"
+                  value={widthSegments}
+                  type="number"
+                  returnValue={(value) => handleChange(value, setWidthSegments)}
+                  onChange={(e) => {
+                    handleChange(e.target.value, setWidthSegments);
+                    handleInputMutation({
+                      width_segments: Number(e.target.value),
+                    });
+                  }}
+                />
+
+                <Input
+                  label="H"
+                  value={heightSegments}
+                  type="number"
+                  returnValue={(value) =>
+                    handleChange(value, setHeightSegments)
+                  }
+                  onChange={(e) => {
+                    handleChange(e.target.value, setHeightSegments);
+                    handleInputMutation({
+                      height_segments: Number(e.target.value),
+                    });
+                  }}
+                />
+                <Input
+                  label="D"
+                  value={depthSegments}
+                  type="number"
+                  returnValue={(value) => handleChange(value, setDepthSegments)}
+                  onChange={(e) => {
+                    handleChange(e.target.value, setDepthSegments);
+                    handleInputMutation({
+                      depth_segments: Number(e.target.value),
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
       <div className=" p-2 bg-primary-gray-900 rounded-lg shadow-md flex flex-col gap-2">
         <h1 className=" text-sm text-neutral-600">Colour</h1>
         <Input
@@ -211,14 +213,22 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
           value={colour}
           type="color"
           returnValue={(value) => handleChange(value, setColour)}
-          onChange={(e) => handleChange(e.target.value, setColour)}
+          onChange={(e) => {
+            handleChange(e.target.value, setColour);
+            handleInputMutation({ colour: e.target.value });
+          }}
         />
         <Input
           label="Wireframe"
           value={wireframe}
           type="select"
           returnValue={(value) => handleChange(value, setWireframe)}
-          onChange={(e) => handleChange(e.target.value, setWireframe)}
+          onChange={(e) => {
+            handleChange(e.target.value, setWireframe);
+            handleInputMutation({
+              wireframe: e.target.value === "true" ? true : false,
+            });
+          }}
         />
       </div>
     </div>

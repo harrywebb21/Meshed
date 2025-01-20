@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateMesh } from "@/utils/queries/mesh";
 import useTransform from "@/utils/hooks/mesh-hooks/useTransform";
 import TransformInputs from "./inputs/TransformInputs";
+import { useTransformSync } from "@/utils/hooks/mesh-hooks/useTransformSync";
 
 interface ValuesMenuProps {
   meshData?: Mesh | null;
@@ -29,6 +30,8 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
       z: meshData?.scale_z || 1,
     },
   });
+
+  useTransformSync(meshData, updateTransform);
 
   //SHAPES
   const [width, setWidth] = useState<number>(meshData?.width || 1);

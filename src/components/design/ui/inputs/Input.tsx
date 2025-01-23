@@ -4,7 +4,7 @@ import { useState } from "react";
 interface InputProps {
   label: string;
   type: string;
-  value: string | number | boolean | undefined;
+  value: string | number | boolean | null | undefined;
   onChange: (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -85,7 +85,7 @@ export default function Input({
                 setIsEmpty(false);
               }
             }}
-            value={typeof value === "boolean" ? value.toString() : value}
+            value={typeof value === "boolean" ? value.toString() : value ?? ""}
             onChange={(e) => {
               onChange(e);
               if (returnValue) {

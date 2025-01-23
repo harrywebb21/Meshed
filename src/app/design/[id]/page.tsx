@@ -71,7 +71,7 @@ export default function WorkspacePage({
       });
     },
     onError: (error) => {
-      console.error("Error adding mesh:", error);
+      console.error("Error adding mesh");
     },
   });
   const updateMeshCountMutation = useMutation({
@@ -87,7 +87,7 @@ export default function WorkspacePage({
       });
     },
     onError: (error) => {
-      console.error("Error updating mesh counts:", error);
+      console.error("Error updating mesh counts");
     },
   });
 
@@ -99,7 +99,6 @@ export default function WorkspacePage({
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "Mesh" },
         (payload) => {
-          console.log("Meshes updated", payload);
           setGeometries((prev) => {
             const newGeometries = prev.filter(
               (mesh) => mesh.id !== (payload.new as Mesh).id

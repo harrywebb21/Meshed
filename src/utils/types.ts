@@ -136,3 +136,29 @@ export interface RingGeometry extends BaseGeometry, RingArgs {
 export interface TorusKnotGeometry extends BaseGeometry, TorusKnotArgs {
   type: "torusKnot";
 }
+
+export interface ShapeValues {
+  type: string | null;
+  width: number | null;
+  height: number | null;
+  depth: number | null;
+  widthSegments: number | null;
+  heightSegments: number | null;
+  depthSegments: number | null;
+  radius: number | null;
+  phiStart: number | null;
+  phiLength: number | null;
+  thetaStart: number | null;
+  thetaLength: number | null;
+  radiusTop: number | null;
+  radiusBottom: number | null;
+  radialSegments: number | null;
+  openEnded: boolean | null;
+  tube: number | null;
+  tubularSegments: number | null;
+  arc: number | null;
+  p: number | null;
+  q: number | null;
+  capSegments: number | null;
+  length: number | null;
+}

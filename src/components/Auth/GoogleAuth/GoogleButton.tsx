@@ -14,21 +14,20 @@ export default function GoogleButton({ type }: { type: "signup" | "login" }) {
 
   return (
     <>
-      <div className="">
-        <button
-          onClick={handleLoginWithGoogle}
-          className=" hover:scale-105 transition-all"
-        >
+      <div
+        className="  px-4 py-2 bg-neutral-950 rounded-xl shadow-md flex flex-col items-center gap-4 cursor-pointer "
+        onClick={handleLoginWithGoogle}
+      >
+        <button className="min-w-64  flex items-center justify-center gap-4">
           <Image
-            src={
-              type === "login"
-                ? "/google/Google_SI.svg"
-                : "/google/Google_SU.svg"
-            }
-            width={200}
+            src={"/google/google.svg"}
+            width={24}
             height={100}
             alt=" google signin button"
           />
+          <p className="text-neutral-600 hover:text-white">
+            {type === "login" ? "Login" : "Sign up"} with Google
+          </p>
         </button>
       </div>
     </>

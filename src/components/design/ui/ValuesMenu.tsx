@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import Input from "./inputs/Input";
 import { Mesh } from "@/utils/supabase/types/dbTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateMesh } from "@/utils/queries/mesh";
@@ -83,7 +81,7 @@ export default function ValuesMenu({ meshData, workspaceId }: ValuesMenuProps) {
         queryKey: ["meshes", workspaceId],
       });
     },
-    onError: (error) => {
+    onError: () => {
       console.error("Error updating mesh");
     },
   });

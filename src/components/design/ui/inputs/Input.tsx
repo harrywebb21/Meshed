@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 interface InputProps {
-  label: string;
+  label?: string;
   type: string;
   value: string | number | boolean | null | undefined;
   onChange: (
@@ -32,7 +32,7 @@ export default function Input({
     <>
       {type === "select" ? (
         <Dropdown
-          label={label}
+          label={label ?? ""}
           value={value?.toString() || ""}
           options={[
             { label: "Yes", value: "true" },
@@ -57,18 +57,18 @@ export default function Input({
               : " border-transparent"
           }  bg-primary-gray-950 rounded-md flex items-center gap-2 pl-2 w-full border`}
         >
-          <label className="text-neutral-600">{label}</label>
+          {label && <label className="text-neutral-600">{label}</label>}
           <input
             type={type}
             className={`${
               type === "number"
-                ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full"
+                ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
                 : ""
             } ${
               type === "color"
-                ? "appearance-none w-full [&::-webkit-color-swatch]:appearance:none [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-sm [&::-moz-color-swatch]:appearance:none [&::-ms-color-swatch]:appearance:none"
+                ? "appearance-none [&::-webkit-color-swatch]:appearance:none [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-sm [&::-moz-color-swatch]:appearance:none [&::-ms-color-swatch]:appearance:none"
                 : " "
-            } bg-transparent p-1 outline-none text-white shadow-md`}
+            } bg-transparent p-1 outline-none text-white shadow-md w-full`}
             onFocus={() => {
               setIsFocused(true);
               setPreviousValue(value ?? "");

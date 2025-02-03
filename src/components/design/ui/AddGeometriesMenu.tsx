@@ -220,49 +220,49 @@ export default function AddGeometriesMenu({
   return (
     <div className=" fixed top-4 -translate-x-1/2 left-1/2 z-10 flex  gap-2 p-2 shadow-md bg-primary-gray-950 rounded-xl w-fit">
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreateCubeGeometry}
       >
         <TbCube />
       </button>
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreateSphereGeometry}
       >
         <TbSphere />
       </button>
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreateCylinderGeometry}
       >
         <TbCylinder />
       </button>
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreatePlaneGeometry}
       >
         <TbBorderAll />
       </button>
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreateTorusGeometry}
       >
         <FaRegCircleDot />
       </button>
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreateConeGeometry}
       >
         <TbCone />
       </button>
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreateCapsuleGeometry}
       >
         <TbCapsule />
       </button>
       <button
-        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm"
+        className="flex items-center gap-2 p-2 bg-primary-gray-900 rounded-md w-fit relative shadow-sm border border-transparent hover:border-primary-green"
         onClick={handleCreateTorusKnotGeometry}
       >
         <TbCircles />

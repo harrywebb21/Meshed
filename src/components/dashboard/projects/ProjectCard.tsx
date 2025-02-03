@@ -12,8 +12,10 @@ export default function ProjectCard({
       key={projectData.id}
       className="h-fit"
     >
-      <div className=" shadow-md rounded-lg p-4 max-h-56 border border-white/10 bg-primary-gray-950/10 min-h-56">
-        <h3 className="text-lg  font-semibold">{projectData.workspace_name}</h3>
+      <div className=" shadow-md  flex items-end max-h-56 bg-primary-gray-900 rounded-lg  min-h-56 border border-transparent hover:border-primary-green">
+        <h3 className=" text-lg  bg-neutral-800 w-full p-2 rounded-lg shadow-md">
+          {projectData.workspace_name}
+        </h3>
       </div>
     </Link>
   );

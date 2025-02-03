@@ -9,7 +9,7 @@ export async function loginWithGoogle(): Promise<string | void> {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:3000/auth/callback",
+      redirectTo: "https://meshed.art/auth/callback",
     },
   });
 

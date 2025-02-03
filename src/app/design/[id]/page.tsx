@@ -70,7 +70,7 @@ export default function WorkspacePage({
         queryKey: ["meshes", id],
       });
     },
-    onError: (error) => {
+    onError: () => {
       console.error("Error adding mesh");
     },
   });
@@ -86,7 +86,7 @@ export default function WorkspacePage({
         queryKey: ["workspace", id],
       });
     },
-    onError: (error) => {
+    onError: () => {
       console.error("Error updating mesh counts");
     },
   });

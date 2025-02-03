@@ -14,12 +14,14 @@ import {
 interface WorkspaceValuesMenuProps {
   workspaceData?: Workspace;
   geometries: Mesh[];
+  selectedGeometry: Mesh | null;
   returnSelectedGeometry: (geometry: Mesh) => void;
 }
 
 export default function WorkspaceValuesMenu({
   workspaceData,
   geometries,
+  selectedGeometry,
   returnSelectedGeometry,
 }: WorkspaceValuesMenuProps) {
   return (
@@ -32,8 +34,14 @@ export default function WorkspaceValuesMenu({
           {geometries.map((geometry) => (
             <button
               key={geometry.id}
-              className=" bg-primary-gray-900 p-2 rounded-lg shadow-md flex gap-2 items-center capitalize"
-              onClick={() => returnSelectedGeometry(geometry)}
+              className={` ${
+                selectedGeometry?.id === geometry.id
+                  ? "border-primary-green"
+                  : " border-transparent"
+              } bg-primary-gray-900 p-2 rounded-lg shadow-md flex gap-2 items-center capitalize border`}
+              onClick={() => {
+                returnSelectedGeometry(geometry);
+              }}
             >
               {(() => {
                 switch (geometry.type) {

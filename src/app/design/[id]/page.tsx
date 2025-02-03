@@ -70,8 +70,8 @@ export default function WorkspacePage({
         queryKey: ["meshes", id],
       });
     },
-    onError: (error) => {
-      console.error("Error adding mesh:", error);
+    onError: () => {
+      console.error("Error adding mesh");
     },
   });
   const updateMeshCountMutation = useMutation({
@@ -86,8 +86,8 @@ export default function WorkspacePage({
         queryKey: ["workspace", id],
       });
     },
-    onError: (error) => {
-      console.error("Error updating mesh counts:", error);
+    onError: () => {
+      console.error("Error updating mesh counts");
     },
   });
 
@@ -99,7 +99,6 @@ export default function WorkspacePage({
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "Mesh" },
         (payload) => {
-          console.log("Meshes updated", payload);
           setGeometries((prev) => {
             const newGeometries = prev.filter(
               (mesh) => mesh.id !== (payload.new as Mesh).id
@@ -121,6 +120,9 @@ export default function WorkspacePage({
     }
   }, [meshData]);
 
+  useEffect(() => {
+    console.log("selectedGeometry", selectedGeometry);
+  }, [selectedGeometry]);
   // FUNCTIONS / HANDLERS
   const handleCreateGeometry = (
     newGeometry:
@@ -236,6 +238,7 @@ export default function WorkspacePage({
       <WorkspaceValuesMenu
         workspaceData={workspaceData}
         geometries={geometries}
+        selectedGeometry={selectedGeometry}
         returnSelectedGeometry={setSelectedGeometry}
       />
       {selectedGeometry && (

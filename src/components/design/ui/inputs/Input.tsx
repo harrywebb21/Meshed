@@ -2,15 +2,16 @@
 import { useState } from "react";
 
 interface InputProps {
-  label: string;
+  label?: string;
   type: string;
-  value: string | number | boolean | undefined;
+  value: string | number | boolean | null | undefined;
   onChange: (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>
   ) => void;
-  returnValue: (value: string | number | boolean) => void;
+  returnValue?: (value: string | number | boolean) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
@@ -19,6 +20,7 @@ export default function Input({
   value,
   onChange,
   returnValue,
+  onBlur,
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -30,7 +32,7 @@ export default function Input({
     <>
       {type === "select" ? (
         <Dropdown
-          label={label}
+          label={label ?? ""}
           value={value?.toString() || ""}
           options={[
             { label: "Yes", value: "true" },
@@ -40,7 +42,9 @@ export default function Input({
             onChange({
               target: { value },
             } as React.ChangeEvent<HTMLSelectElement>);
-            returnValue(value === "true");
+            if (returnValue) {
+              returnValue(value === "true");
+            }
           }}
         />
       ) : (
@@ -53,33 +57,40 @@ export default function Input({
               : " border-transparent"
           }  bg-primary-gray-950 rounded-md flex items-center gap-2 pl-2 w-full border`}
         >
-          <label className="text-neutral-600">{label}</label>
+          {label && <label className="text-neutral-600">{label}</label>}
           <input
             type={type}
             className={`${
               type === "number"
-                ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full"
+                ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
                 : ""
             } ${
               type === "color"
-                ? "appearance-none w-full [&::-webkit-color-swatch]:appearance:none [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-sm [&::-moz-color-swatch]:appearance:none [&::-ms-color-swatch]:appearance:none"
+                ? "appearance-none [&::-webkit-color-swatch]:appearance:none [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-sm [&::-moz-color-swatch]:appearance:none [&::-ms-color-swatch]:appearance:none"
                 : " "
-            } bg-transparent p-1 outline-none text-white shadow-md`}
+            } bg-transparent p-1 outline-none text-white shadow-md w-full`}
             onFocus={() => {
               setIsFocused(true);
               setPreviousValue(value ?? "");
             }}
             onBlur={(e) => {
+              if (onBlur) {
+                onBlur(e);
+              }
               setIsFocused(false);
               if (e.target.value === "") {
-                returnValue(previousValue);
+                if (returnValue) {
+                  returnValue(previousValue);
+                }
                 setIsEmpty(false);
               }
             }}
-            value={typeof value === "boolean" ? value.toString() : value}
+            value={typeof value === "boolean" ? value.toString() : value ?? ""}
             onChange={(e) => {
               onChange(e);
-              returnValue(e.target.value);
+              if (returnValue) {
+                returnValue(e.target.value);
+              }
               if (e.target.value === "") {
                 setIsEmpty(true);
               } else {

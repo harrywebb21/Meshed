@@ -84,6 +84,9 @@ export const Cube = ({
             data.width ?? undefined,
             data.height ?? undefined,
             data.depth ?? undefined,
+            data.width_segments ?? undefined,
+            data.height_segments ?? undefined,
+            data.depth_segments ?? undefined,
           ]}
         />
         <meshStandardMaterial

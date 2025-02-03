@@ -41,6 +41,10 @@ export const Sphere = ({
             data.radius ?? 1,
             data.width_segments ?? 32,
             data.height_segments ?? 32,
+            data.phi_start ?? 0,
+            data.phi_length ?? Math.PI * 2,
+            data.theta_start ?? 0,
+            data.theta_length ?? Math.PI,
           ]}
         />
         <meshStandardMaterial

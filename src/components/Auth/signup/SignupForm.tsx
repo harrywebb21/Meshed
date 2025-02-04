@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { signup } from "./actions";
 import Input from "@/components/design/ui/inputs/Input";
 import Logo from "@/components/Logo";
+import { createClient } from "@/utils/supabase/client";
 
 export default function SignupForm() {
   const [error, setError] = React.useState<string | null>(null);
@@ -14,9 +14,9 @@ export default function SignupForm() {
   );
   const [displayName, setDisplayName] = React.useState<string | null>(null);
 
-  async function handleSignup(event: React.FormEvent) {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
+  const supabase = createClient();
+
+  async function handleSignup() {
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -30,13 +30,22 @@ export default function SignupForm() {
       setError("Please fill in all fields");
       return;
     }
-    formData.append("display_name", formData.get("display_name") as string);
-    formData.append("email", formData.get("email") as string);
-    formData.append("password", formData.get("password") as string);
-    const loginError = await signup(formData);
-    if (loginError) {
-      setError(loginError);
-    }
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("display_name", displayName);
+
+    await supabase.auth.signUp({
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      options: {
+        data: {
+          display_name: formData.get("display_name") as string,
+        },
+        emailRedirectTo: "https://meshed.art/dashboard",
+      },
+    });
   }
 
   return (
@@ -46,7 +55,7 @@ export default function SignupForm() {
       </div>
       <div className="p-4 rounded-xl bg-neutral-950 shadow-md flex flex-col items-center gap-4 ">
         <div className="min-w-64">
-          <form onSubmit={handleSignup} className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label htmlFor="email" className="text-neutral-600">
               Display Name
             </label>
@@ -104,12 +113,12 @@ export default function SignupForm() {
             />
             {error && <p className="text-red-500">{error}</p>}
             <button
-              type="submit"
+              onClick={handleSignup}
               className=" p-1 rounded-lg font-medium bg-primary-gray-950 text-neutral-600 border border-transparent hover:border-primary-green"
             >
               create account
             </button>
-          </form>
+          </div>
         </div>
         <div className="flex gap-1">
           <h1 className=" text-sm text-neutral-600">

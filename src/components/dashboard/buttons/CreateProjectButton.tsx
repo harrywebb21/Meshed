@@ -1,11 +1,12 @@
 "use client";
+import Input from "@/components/design/ui/inputs/Input";
 import Toast from "@/components/Toast";
 import { useAuthUser } from "@/utils/hooks/useAuthUser";
 import { useGetProfile } from "@/utils/hooks/useGetProfile";
 import { createWorkspace } from "@/utils/queries/workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-// import { FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 
 export default function CreateProjectButton() {
@@ -40,37 +41,32 @@ export default function CreateProjectButton() {
   return (
     <>
       <button
-        className="shadow-md flex items-center gap-2 py-3 px-4 rounded-xl bg-primary-green "
+        className="shadow-md flex items-center gap-2 py-3 px-4 rounded-lg  bg-primary-gray-900 border border-transparent hover:bg-primary-gray-950 hover:border-primary-green transition-colors"
         onClick={() => setModalOpen(!modalOpen)}
       >
-        {/* <FaPlus className=" text-black text-sm" /> */}
-        <p className="text-black font-semibold text-sm">New Project</p>
+        <FaPlus className="  text-sm" />
+        <p className=" font-semibold text-sm">New Project</p>
       </button>
       {modalOpen && (
-        <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded-md gap-4 flex flex-col">
-            <div className="flex gap-8 items-center">
-              <h1 className="font-black text-2xl text-black">Create Project</h1>
-              <button
-                className=" p-2 rounded-full bg-black shadow-md"
-                onClick={() => setModalOpen(false)}
-              >
-                <IoIosClose />
+        <div className="fixed top-0 left-0 w-screen h-screen bg-black/80 flex items-center justify-center">
+          <div className="bg-neutral-950    rounded-md  flex flex-col">
+            <div className="flex justify-between items-center   bg-neutral-800 w-full p-2 rounded-lg shadow-md">
+              <h1 className="font-semibold text-lg ">Create Project</h1>
+              <button className=" " onClick={() => setModalOpen(false)}>
+                <IoIosClose className=" hover:text-primary-green" size={32} />
               </button>
             </div>
             <form
-              className=" flex flex-col gap-2"
+              className=" flex flex-col gap-2 p-2"
               onSubmit={handleCreateWorkspace}
             >
-              <input
+              <Input
                 type="text"
-                placeholder="Project Name"
-                className="w-full p-2 rounded-md outline focus-within:outline-2 text-black"
                 value={workspaceName}
                 onChange={(e) => setWorkspaceName(e.target.value)}
               />
               <button
-                className="bg-black text-white p-2 rounded-md"
+                className="bg-primary-gray-950 text-white p-1 rounded-md border border-transparent hover:border-primary-green transition-colors"
                 type="submit"
               >
                 Create

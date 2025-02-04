@@ -7,6 +7,7 @@ import ProjectCard from "./ProjectCard";
 
 export default function ProjectSection() {
   const userId = useAuthUser();
+
   const profile = useGetProfile(userId?.id);
 
   const { data, error } = useQuery<Workspace[]>({

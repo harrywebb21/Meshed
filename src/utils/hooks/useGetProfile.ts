@@ -13,7 +13,7 @@ export function useGetProfile(userId?: string) {
   if (!userId) {
     userId = user?.id;
   }
-
+  console.log(userId);
   const { data, error } = useQuery<Profile>({
     enabled: !!userId,
     queryKey: ["profile", profile?.id],
@@ -25,6 +25,6 @@ export function useGetProfile(userId?: string) {
       setProfile(data);
     }
   }, [data]);
-
+  console.log("profile", profile);
   return { profile, error };
 }

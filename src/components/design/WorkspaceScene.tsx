@@ -52,7 +52,7 @@ export default function WorkspaceScene({
           sectionThickness={0.5}
         />
       </group>
-      <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
+      <GizmoHelper alignment="bottom-center" margin={[80, 80]}>
         <GizmoViewport
           axisColors={["#FF1158", "#05FF69", "#04A5FF"]}
           labelColor="black"

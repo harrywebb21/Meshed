@@ -48,9 +48,9 @@ export default function CreateProjectButton() {
         <p className=" font-semibold text-sm">New Project</p>
       </button>
       {modalOpen && (
-        <div className="fixed top-0 left-0 w-screen h-screen bg-black/80 flex items-center justify-center">
-          <div className="bg-neutral-950    rounded-md  flex flex-col">
-            <div className="flex justify-between items-center   bg-neutral-800 w-full p-2 rounded-lg shadow-md">
+        <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 flex items-center justify-center">
+          <div className="bg-primary-gray-950  min-w-80  rounded-md  flex flex-col">
+            <div className="flex justify-between items-center  w-full p-4 rounded-lg shadow-md">
               <h1 className="font-semibold text-lg ">Create Project</h1>
               <button className=" " onClick={() => setModalOpen(false)}>
                 <IoIosClose className=" hover:text-primary-green" size={32} />

@@ -3,6 +3,7 @@ import { Mesh } from "../supabase/types/dbTypes";
 // import { CubeMeshData, SphereMesh } from "../types";
 
 const supabase = createClient();
+
 export async function addMesh(meshData: Mesh): Promise<void> {
   const { data, error } = await supabase.from("Mesh").insert([meshData]);
   if (data) {

@@ -10,15 +10,36 @@ export async function createWorkspace({
   workspaceName: string;
   ownerId: string;
 }): Promise<void> {
-  const { error } = await supabase.from("Workspace").insert([
-    {
-      workspace_name: workspaceName,
-      owner_id: ownerId,
-    },
-  ]);
+  const { data, error } = await supabase
+    .from("Workspace")
+    .insert([
+      {
+        workspace_name: workspaceName,
+        owner_id: ownerId,
+      },
+    ])
+    .select("*")
+    .single();
 
   if (error) {
     console.error("Error creating workspace:", error.message);
+    return;
+  }
+
+  if (!data) {
+    console.error("Error creating workspace: no data returned");
+    return;
+  }
+  const { error: error2 } = await supabase.from("WorkspaceUser").insert([
+    {
+      workspace_id: data.id,
+      user_id: ownerId,
+      role: "owner",
+    },
+  ]);
+
+  if (error2) {
+    console.error("Error creating workspace user:", error2.message);
     return;
   }
 

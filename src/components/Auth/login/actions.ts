@@ -17,13 +17,12 @@ export async function login(formData: FormData): Promise<string | void> {
     data
   );
 
-  handleLoginWithEmailCallback(signInData?.user);
-
   if (error) {
     console.error("Error logging in:", error.message);
 
     return error.message;
   }
+  handleLoginWithEmailCallback(signInData?.user);
   revalidatePath("/", "layout");
   redirect("/dashboard");
 }

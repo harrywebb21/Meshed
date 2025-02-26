@@ -16,18 +16,19 @@ export default function SignupForm() {
 
   const supabase = createClient();
 
-  async function handleSignup() {
+  async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!displayName || !email || !password || !confirmPassword) {
+      setError("Please fill in all fields");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
     if (!password || password.length < 8) {
       setError("Password must be at least 8 characters long");
-      return;
-    }
-
-    if (!displayName || !email || !password || !confirmPassword) {
-      setError("Please fill in all fields");
       return;
     }
 
@@ -55,70 +56,69 @@ export default function SignupForm() {
       </div>
       <div className="p-4 rounded-xl bg-neutral-950 shadow-md flex flex-col items-center gap-4 ">
         <div className="min-w-64">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-neutral-600">
-              Display Name
-            </label>
-            <Input
-              type="text"
-              value={displayName}
-              onChange={(e) => {
-                setDisplayName(e.target.value);
-              }}
-            />
-            <label htmlFor="email" className="text-neutral-600">
-              Email
-            </label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              onBlur={(e) => {
-                if (!e.target.value.includes("@")) {
-                  setError("A Valid Email is required");
-                } else {
-                  setError(null);
-                }
-              }}
-            />
+          <form onSubmit={handleSignup}>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="email" className="text-neutral-600">
+                Display Name
+              </label>
+              <Input
+                type="text"
+                value={displayName}
+                onChange={(e) => {
+                  setDisplayName(e.target.value);
+                }}
+              />
+              <label htmlFor="email" className="text-neutral-600">
+                Email
+              </label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                onBlur={(e) => {
+                  if (!e.target.value.includes("@")) {
+                    setError("A Valid Email is required");
+                  } else {
+                    setError(null);
+                  }
+                }}
+              />
 
-            <label htmlFor="password" className="text-neutral-600">
-              Password
-            </label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <label htmlFor="password" className="text-neutral-600">
-              Confirm Password
-            </label>
-            <Input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
-              onBlur={(e) => {
-                if (password !== e.target.value) {
-                  setError("Passwords do not match");
-                } else {
-                  setError(null);
-                }
-              }}
-            />
-            {error && <p className="text-red-500">{error}</p>}
-            <button
-              onClick={handleSignup}
-              className=" p-1 rounded-lg font-medium bg-primary-gray-950 text-neutral-600 border border-transparent hover:border-primary-green"
-            >
-              create account
-            </button>
-          </div>
+              <label htmlFor="password" className="text-neutral-600">
+                Password
+              </label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <label htmlFor="password" className="text-neutral-600">
+                Confirm Password
+              </label>
+              <Input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                }}
+                onBlur={(e) => {
+                  if (password !== e.target.value) {
+                    setError("Passwords do not match");
+                  } else {
+                    setError(null);
+                  }
+                }}
+              />
+              {error && <p className="text-red-500">{error}</p>}
+              <button className=" p-1 rounded-lg font-medium bg-primary-gray-950 text-neutral-600 border border-transparent hover:border-primary-green">
+                create account
+              </button>
+            </div>
+          </form>
         </div>
         <div className="flex gap-1">
           <h1 className=" text-sm text-neutral-600">

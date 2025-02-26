@@ -11,7 +11,8 @@ export default function LoginForm() {
   const [email, setEmail] = React.useState<string | null>(null);
   const [password, setPassword] = React.useState<string | null>(null);
 
-  async function handleLogin() {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     if (!email || !password) {
       setError("Email and password are required");
       return;
@@ -24,7 +25,10 @@ export default function LoginForm() {
     formData.append("email", email);
     formData.append("password", password);
 
-    await login(formData);
+    const data = await login(formData);
+    if (data) {
+      setError(data);
+    }
   }
 
   return (
@@ -34,42 +38,41 @@ export default function LoginForm() {
       </div>
       <div className="p-4 rounded-xl bg-neutral-950 shadow-md flex flex-col items-center gap-4 ">
         <div className="min-w-64">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-neutral-600">
-              Email
-            </label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              onBlur={(e) => {
-                if (!e.target.value.includes("@")) {
-                  setError("A Valid Email is required");
-                } else {
-                  setError(null);
-                }
-              }}
-            />
-            <label htmlFor="password" className="text-neutral-600">
-              Password
-            </label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            {error && <p className="text-red-500">{error}</p>}
-            <button
-              onClick={handleLogin}
-              className=" p-1 rounded-lg font-medium bg-primary-gray-950 text-neutral-600 border border-transparent hover:border-primary-green"
-            >
-              login
-            </button>
-          </div>
+          <form onSubmit={handleLogin}>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="email" className="text-neutral-600">
+                Email
+              </label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                onBlur={(e) => {
+                  if (!e.target.value.includes("@")) {
+                    setError("A Valid Email is required");
+                  } else {
+                    setError(null);
+                  }
+                }}
+              />
+              <label htmlFor="password" className="text-neutral-600">
+                Password
+              </label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              {error && <p className="text-red-500">{error}</p>}
+              <button className=" p-1 rounded-lg font-medium bg-primary-gray-950 text-neutral-600 border border-transparent hover:border-primary-green">
+                login
+              </button>
+            </div>
+          </form>
         </div>
         <div className="flex gap-1">
           <h1 className=" text-sm text-neutral-600">

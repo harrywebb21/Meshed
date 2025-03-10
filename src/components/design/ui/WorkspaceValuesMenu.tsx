@@ -39,10 +39,13 @@ export default function WorkspaceValuesMenu({
   return (
     <>
       {isShareModalOpen && (
-        <ShareModal onclick={() => setIsShareModalOpen(false)} />
+        <ShareModal
+          workspaceId={workspaceData?.id}
+          onclick={() => setIsShareModalOpen(false)}
+        />
       )}
-      <div className=" fixed top-4 left-4 bottom-4 z-10 flex flex-col p-2 gap-2 shadow-md bg-primary-gray-950 rounded-xl min-w-64">
-        <div className="sticky top-0bg-primary-gray-900 shadow-md p-2 rounded-lg flex justify-between items-center gap-2">
+      <div className=" fixed top-4 left-4 bottom-4 z-10 flex flex-col p-2 gap-2 shadow-md bg-primary-gray-950 rounded-xl min-w-64 ">
+        <div className=" bg-primary-gray-900 shadow-md p-2 rounded-lg flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <button onClick={handleDashboardRedirect}>
               <IoArrowBack size={16} className=" hover:text-primary-green" />
@@ -57,9 +60,9 @@ export default function WorkspaceValuesMenu({
             }}
           />
         </div>
-        <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col justify-between h-full ">
           {geometries.length !== 0 && (
-            <div className="flex flex-col pr-2 gap-2 overflow-y-auto">
+            <div className="flex flex-col  pr-2 gap-2 overflow-y-auto">
               {geometries.map((geometry) => (
                 <button
                   key={geometry.id}
@@ -99,10 +102,10 @@ export default function WorkspaceValuesMenu({
               ))}
             </div>
           )}
-          <div className=" h-fit flex items-center justify-center w-full gap-2">
-            <Logo className="w-12" green />
-            <PresenceIndicators workspaceId={workspaceData?.id} />
-          </div>
+        </div>
+        <div className="sticky bottom-0 h-fit flex items-center bg-primary-gray-900 rounded-lg p-2 justify-center w-full gap-2">
+          <Logo className="w-12" green />
+          <PresenceIndicators workspaceId={workspaceData?.id} />
         </div>
       </div>
     </>

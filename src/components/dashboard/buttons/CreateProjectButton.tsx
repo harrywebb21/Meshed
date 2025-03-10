@@ -49,29 +49,31 @@ export default function CreateProjectButton() {
       </button>
       {modalOpen && (
         <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 flex items-center justify-center">
-          <div className="bg-primary-gray-950  min-w-80  rounded-md  flex flex-col">
-            <div className="flex justify-between items-center  w-full p-4 rounded-lg shadow-md">
-              <h1 className="font-semibold text-lg ">Create Project</h1>
-              <button className=" " onClick={() => setModalOpen(false)}>
-                <IoIosClose className=" hover:text-primary-green" size={32} />
-              </button>
-            </div>
-            <form
-              className=" flex flex-col gap-2 p-2"
-              onSubmit={handleCreateWorkspace}
-            >
-              <Input
-                type="text"
-                value={workspaceName}
-                onChange={(e) => setWorkspaceName(e.target.value)}
-              />
-              <button
-                className="bg-primary-gray-950 text-white p-1 rounded-md border border-transparent hover:border-primary-green transition-colors"
-                type="submit"
+          <div className="bg-primary-gray-950 shadow-md p-2 rounded-lg min-w-96">
+            <div className="bg-primary-gray-900 shadow-md p-4 rounded-lg flex flex-col gap-4 ">
+              <div className="flex justify-between items-center ">
+                <h1 className="font-semibold text-lg ">Create Project</h1>
+                <button className=" " onClick={() => setModalOpen(false)}>
+                  <IoIosClose className=" hover:text-primary-green" size={32} />
+                </button>
+              </div>
+              <form
+                className=" flex flex-col gap-2"
+                onSubmit={handleCreateWorkspace}
               >
-                Create
-              </button>
-            </form>
+                <Input
+                  type="text"
+                  value={workspaceName}
+                  onChange={(e) => setWorkspaceName(e.target.value)}
+                />
+                <button
+                  className="bg-primary-gray-950 text-white p-1 rounded-md border border-transparent hover:border-primary-green transition-colors"
+                  type="submit"
+                >
+                  Create
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       )}

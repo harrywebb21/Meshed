@@ -105,8 +105,8 @@ export default function Input({
 }
 
 interface DropdownProps {
-  label: string;
-  value: string;
+  label?: string;
+  value?: string;
   options: { label: string; value: string }[];
   onChange: (value: string) => void;
 }
@@ -131,7 +131,7 @@ export function Dropdown({ label, value, options, onChange }: DropdownProps) {
           className="w-full  p-1 rounded-md flex items-center justify-between  h-full "
           onClick={() => setIsOpened(!isOpened)}
         >
-          {value === "true" ? "Yes" : "No"}
+          {value === "true" ? "Yes" : value === "false" ? "No" : value}
         </button>
         {isOpened && (
           <div

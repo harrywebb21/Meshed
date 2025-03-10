@@ -1,5 +1,4 @@
 import CreateProjectButton from "@/components/dashboard/buttons/CreateProjectButton";
-import Logo from "@/components/Logo";
 import UserNameTag from "@/components/user/UserNameTag";
 import { ReactNode } from "react";
 
@@ -14,12 +13,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <UserNameTag />
         <CreateProjectButton />
       </div>
-      <div className="flex h-full w-full gap-4 overflow-hidden">
-        <div className=" min-w-56 bg-primary-gray-950 rounded-xl shadow-md flex flex-col justify-end gap-4 p-4">
-          <Logo className="w-12 " green />
-        </div>
-        <div className=" w-full overflow-auto">{children}</div>
-      </div>
+      {children}
     </div>
   );
 }

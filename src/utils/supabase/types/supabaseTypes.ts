@@ -50,6 +50,7 @@ export type Database = {
           tube: number | null
           tubular_segments: number | null
           type: string | null
+          updated_at: string | null
           width: number | null
           width_segments: number | null
           wireframe: boolean | null
@@ -95,6 +96,7 @@ export type Database = {
           tube?: number | null
           tubular_segments?: number | null
           type?: string | null
+          updated_at?: string | null
           width?: number | null
           width_segments?: number | null
           wireframe?: boolean | null
@@ -140,6 +142,7 @@ export type Database = {
           tube?: number | null
           tubular_segments?: number | null
           type?: string | null
+          updated_at?: string | null
           width?: number | null
           width_segments?: number | null
           wireframe?: boolean | null
@@ -228,6 +231,7 @@ export type Database = {
         Row: {
           id: number
           invited_at: string
+          permission_type: string
           role: string
           user_id: string
           workspace_id: string
@@ -235,6 +239,7 @@ export type Database = {
         Insert: {
           id?: number
           invited_at?: string
+          permission_type?: string
           role: string
           user_id?: string
           workspace_id?: string
@@ -242,6 +247,7 @@ export type Database = {
         Update: {
           id?: number
           invited_at?: string
+          permission_type?: string
           role?: string
           user_id?: string
           workspace_id?: string

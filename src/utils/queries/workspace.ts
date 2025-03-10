@@ -1,5 +1,6 @@
 import { createClient } from "../supabase/client";
-import { Workspace } from "../supabase/types/dbTypes";
+import { Workspace, WorkspaceUser } from "../supabase/types/dbTypes";
+import { getUserByEmail } from "./profile";
 
 const supabase = createClient();
 
@@ -35,6 +36,7 @@ export async function createWorkspace({
       workspace_id: data.id,
       user_id: ownerId,
       role: "owner",
+      permission_type: "edit",
     },
   ]);
 
@@ -75,4 +77,101 @@ export async function getWorkspaceById(
   }
 
   return data;
+}
+
+export async function inviteWorkspaceUser(
+  workspace_id: string | undefined,
+  email: string,
+  permission_type: string
+): Promise<WorkspaceUser> {
+  const user = await getUserByEmail(email);
+  const isAlreadyMember = await getWorkspaceUserById(workspace_id, user.id);
+  console.log("isAlreadyMember", isAlreadyMember);
+  if (!user) {
+    throw new Error("User not found");
+  } else if (isAlreadyMember) {
+    throw new Error("User is already a member of this workspace");
+  } else {
+    const { data, error } = await supabase
+      .from("WorkspaceUser")
+      .insert([
+        {
+          workspace_id,
+          user_id: user.id,
+          role: "member",
+          permission_type,
+        },
+      ])
+      .single();
+
+    if (error) {
+      console.error("Error inviting user to workspace:", error.message);
+      throw error;
+    }
+    return data;
+  }
+}
+
+export async function getWorkspaceUserById(
+  workspaceId: string | undefined,
+  userId: string
+): Promise<WorkspaceUser> {
+  const { data, error } = await supabase
+    .from("WorkspaceUser")
+    .select("*")
+    .eq("workspace_id", workspaceId)
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getWorkspaceUsers(
+  workspaceId: string
+): Promise<WorkspaceUser[]> {
+  const { data, error } = await supabase
+    .from("WorkspaceUser")
+    .select("*")
+    .eq("workspace_id", workspaceId);
+
+  if (error) {
+    console.error("Error fetching workspace users:", error.message);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getSharedWorkspaces(
+  userId: string
+): Promise<Workspace[]> {
+  const { data, error } = await supabase
+    .from("WorkspaceUser")
+    .select("workspace_id")
+    .eq("user_id", userId)
+    .eq("role", "member");
+
+  if (error) {
+    console.error("Error fetching shared workspaces:", error.message);
+    throw error;
+  }
+
+  console.log("data", data);
+
+  const workspaceIds = data.map((workspace) => workspace.workspace_id);
+  const { data: workspaces, error: error2 } = await supabase
+    .from("Workspace")
+    .select("*")
+    .in("id", workspaceIds);
+
+  if (error2) {
+    console.error("Error fetching shared workspaces:", error2.message);
+    throw error2;
+  }
+
+  return workspaces;
 }

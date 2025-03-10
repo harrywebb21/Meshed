@@ -13,7 +13,7 @@ export function useAuthUser() {
     async function fetchUser() {
       const { data: userData, error } = await supabase.auth.getUser();
       if (error) {
-        console.error(error);
+        console.log("Viewing as guest user");
       } else if (isMounted && userData) {
         setUser(userData.user);
       }

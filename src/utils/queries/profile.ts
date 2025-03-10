@@ -16,3 +16,17 @@ export async function getProfile(userId: string): Promise<Profile> {
   }
   return data;
 }
+
+export async function getUserByEmail(email: string): Promise<Profile> {
+  const { data, error } = await supabase
+    .from("Profile")
+    .select("*")
+    .eq("email", email)
+    .limit(1)
+    .single();
+
+  if (error) {
+    throw new Error("Couldn't find user with that email");
+  }
+  return data;
+}

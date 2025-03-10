@@ -39,6 +39,7 @@ export default function WorkspacePage({
   //Get the workspace id from the params
   const { id } = params;
   const user = useAuthUser();
+  console.log("user", user);
   const profile = useGetProfile(user?.id);
 
   //STATES
@@ -218,6 +219,7 @@ export default function WorkspacePage({
         scale_x: newGeometry.scale_x ?? null,
         scale_y: newGeometry.scale_y ?? null,
         scale_z: newGeometry.scale_z ?? null,
+        updated_at: new Date().toISOString(),
       };
 
       newMeshMutation.mutate(newMesh);
@@ -232,16 +234,20 @@ export default function WorkspacePage({
 
   return (
     <div className="w-full h-svh relative">
-      <WorkspaceValuesMenu
-        workspaceData={workspaceData}
-        geometries={geometries}
-        selectedGeometry={selectedGeometry}
-        returnSelectedGeometry={setSelectedGeometry}
-      />
-      {selectedGeometry && (
+      {user && profile && (
+        <WorkspaceValuesMenu
+          workspaceData={workspaceData}
+          geometries={geometries}
+          selectedGeometry={selectedGeometry}
+          returnSelectedGeometry={setSelectedGeometry}
+        />
+      )}
+      {selectedGeometry && user && profile && (
         <ValuesMenu meshData={selectedGeometry} workspaceId={id} />
       )}
-      <AddGeometriesMenu onCreateGeometry={handleCreateGeometry} />
+      {user && profile && (
+        <AddGeometriesMenu onCreateGeometry={handleCreateGeometry} />
+      )}
 
       <WorkspaceScene>
         {geometries.map((geometry: Mesh) => {
@@ -253,7 +259,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             case "sphere":
@@ -263,7 +273,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             case "cylinder":
@@ -273,7 +287,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             case "plane":
@@ -283,7 +301,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             case "torus":
@@ -293,7 +315,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             case "cone":
@@ -303,7 +329,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             case "capsule":
@@ -313,7 +343,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             case "torusKnot":
@@ -323,7 +357,11 @@ export default function WorkspacePage({
                   data={geometry}
                   wireframe={geometry.wireframe ?? false}
                   showControls={selectedGeometry?.id === geometry.id}
-                  onClick={() => setSelectedGeometry(geometry)}
+                  onClick={() => {
+                    if (user) {
+                      setSelectedGeometry(geometry);
+                    }
+                  }}
                 />
               );
             default:

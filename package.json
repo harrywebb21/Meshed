@@ -10,6 +10,7 @@
     "typegen": "npx supabase gen types --lang=typescript --project-id \"mvsbyvacvtrorjdnydtr\" --schema public > src/utils/supabase/types/supabaseTypes.ts"
   },
   "dependencies": {
+    "@react-email/components": "0.0.33",
     "@react-three/drei": "^9.114.3",
     "@react-three/fiber": "^8.17.10",
     "@supabase/ssr": "^0.5.2",
@@ -21,9 +22,10 @@
     "leva": "^0.9.35",
     "motion": "^11.11.17",
     "next": "14.2.15",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-icons": "^5.3.0",
+    "resend": "^4.1.2",
     "supabase": "^1.219.2",
     "three": "^0.169.0"
   },
@@ -34,6 +36,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "postcss": "^8",
+    "react-email": "3.0.7",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },

@@ -39,7 +39,6 @@ export default function WorkspacePage({
   //Get the workspace id from the params
   const { id } = params;
   const user = useAuthUser();
-  console.log("user", user);
   const profile = useGetProfile(user?.id);
 
   //STATES

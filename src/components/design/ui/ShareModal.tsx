@@ -14,7 +14,7 @@ interface ShareModalProps {
 
 export default function ShareModal({ onclick, workspaceId }: ShareModalProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const [permissionType, setPermissionType] = useState("");
+  const [permissionType, setPermissionType] = useState("view");
   const [inviteMessage, setInviteMessage] = useState("");
   const [email, setEmail] = useState("");
 
@@ -35,6 +35,7 @@ export default function ShareModal({ onclick, workspaceId }: ShareModalProps) {
       permissionType: string;
       workspaceId: string | undefined;
     }) => {
+      console.log("inviteData", inviteData);
       await inviteWorkspaceUser(
         inviteData.workspaceId,
         inviteData.email,
@@ -101,6 +102,7 @@ export default function ShareModal({ onclick, workspaceId }: ShareModalProps) {
                   ]}
                   onChange={(label) => {
                     setPermissionType(label);
+                    console.log("type", permissionType);
                   }}
                 />
               </div>

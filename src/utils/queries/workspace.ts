@@ -1,6 +1,7 @@
 import { createClient } from "../supabase/client";
 import { Workspace, WorkspaceUser } from "../supabase/types/dbTypes";
 import { getUserByEmail } from "./profile";
+import { sendEmail } from "./resend/emails";
 
 const supabase = createClient();
 
@@ -63,7 +64,7 @@ export async function getWorkspaces(userId: string): Promise<Workspace[]> {
 }
 
 export async function getWorkspaceById(
-  workspaceId: string
+  workspaceId: string | undefined
 ): Promise<Workspace> {
   const { data, error } = await supabase
     .from("Workspace")
@@ -85,31 +86,29 @@ export async function inviteWorkspaceUser(
   permission_type: string
 ): Promise<WorkspaceUser> {
   const user = await getUserByEmail(email);
-  const isAlreadyMember = await getWorkspaceUserById(workspace_id, user.id);
-  console.log("isAlreadyMember", isAlreadyMember);
+  // const isAlreadyMember = await getWorkspaceUserById(workspace_id, user.id);
   if (!user) {
     throw new Error("User not found");
-  } else if (isAlreadyMember) {
-    throw new Error("User is already a member of this workspace");
-  } else {
-    const { data, error } = await supabase
-      .from("WorkspaceUser")
-      .insert([
-        {
-          workspace_id,
-          user_id: user.id,
-          role: "member",
-          permission_type,
-        },
-      ])
-      .single();
-
-    if (error) {
-      console.error("Error inviting user to workspace:", error.message);
-      throw error;
-    }
-    return data;
   }
+  const { data, error } = await supabase
+    .from("WorkspaceUser")
+    .insert([
+      {
+        workspace_id,
+        user_id: user.id,
+        role: "member",
+        permission_type,
+      },
+    ])
+    .select()
+    .single();
+  const workspace = await getWorkspaceById(workspace_id);
+  await sendEmail(user, workspace);
+  if (error) {
+    console.error("Error inviting user to workspace:", error.message);
+    throw error;
+  }
+  return data[0];
 }
 
 export async function getWorkspaceUserById(
@@ -159,8 +158,6 @@ export async function getSharedWorkspaces(
     console.error("Error fetching shared workspaces:", error.message);
     throw error;
   }
-
-  console.log("data", data);
 
   const workspaceIds = data.map((workspace) => workspace.workspace_id);
   const { data: workspaces, error: error2 } = await supabase

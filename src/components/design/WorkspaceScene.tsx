@@ -1,5 +1,6 @@
 "use client";
 import {
+  Environment,
   GizmoHelper,
   GizmoViewport,
   Grid,
@@ -36,7 +37,7 @@ export default function WorkspaceScene({
       <pointLight position={[10, 10, 10]} />
       {/* <perspectiveCamera position={[10, 10, 12]} fov={25} /> */}
       <CameraSetup />
-
+      <Environment preset="sunset" />
       {children}
       <group>
         <OrbitControls makeDefault />

@@ -1,6 +1,7 @@
 import { Mesh } from "@/utils/supabase/types/dbTypes";
 import { PivotControls } from "@react-three/drei";
 import { MeshProps, Vector3, Euler } from "@react-three/fiber";
+import * as THREE from "three";
 import React from "react";
 
 interface CylinderProps extends MeshProps {
@@ -44,11 +45,14 @@ export const Cylinder = ({
             data.radial_segments ?? 32,
             data.height_segments ?? 1,
             data.open_ended ?? false,
+            data.theta_start ?? 0,
+            data.theta_length ?? Math.PI * 2,
           ]}
         />
         <meshStandardMaterial
           color={data.colour || undefined}
           wireframe={data.wireframe ?? false}
+          side={THREE.DoubleSide}
         />
       </mesh>
     </PivotControls>

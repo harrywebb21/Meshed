@@ -30,6 +30,7 @@ import { Torus } from "@/components/design/geometries/Torus";
 import { Cone } from "@/components/design/geometries/Cone";
 import { Capsule } from "@/components/design/geometries/Capsule";
 import { TorusKnot } from "@/components/design/geometries/TorusKnot";
+import Loader from "@/components/Loader";
 
 export default function WorkspacePage({
   params,
@@ -157,64 +158,69 @@ export default function WorkspacePage({
         rot_y: newGeometry.rot_y ?? null,
         rot_z: newGeometry.rot_z ?? null,
         wireframe: newGeometry.wireframe,
-        arc: "arc" in newGeometry ? newGeometry.arc ?? Math.PI * 2 : null,
+        arc: "arc" in newGeometry ? (newGeometry.arc ?? Math.PI * 2) : null,
         cap_segments:
-          "capSegments" in newGeometry ? newGeometry.capSegments ?? 8 : null,
-        depth: "depth" in newGeometry ? newGeometry.depth ?? 1 : null,
-        height: "height" in newGeometry ? newGeometry.height ?? 1 : null,
-        length: "length" in newGeometry ? newGeometry.length ?? 1 : null,
-        radius: "radius" in newGeometry ? newGeometry.radius ?? 1 : null,
+          "capSegments" in newGeometry ? (newGeometry.capSegments ?? 8) : null,
+        depth: "depth" in newGeometry ? (newGeometry.depth ?? 1) : null,
+        height: "height" in newGeometry ? (newGeometry.height ?? 1) : null,
+        length: "length" in newGeometry ? (newGeometry.length ?? 1) : null,
+        radius: "radius" in newGeometry ? (newGeometry.radius ?? 1) : null,
         radius_bottom:
           "radiusBottom" in newGeometry
-            ? newGeometry.radiusBottom ?? null
+            ? (newGeometry.radiusBottom ?? null)
             : null,
         radius_top:
-          "radiusTop" in newGeometry ? newGeometry.radiusTop ?? null : null,
+          "radiusTop" in newGeometry ? (newGeometry.radiusTop ?? null) : null,
         radial_segments:
           "radialSegments" in newGeometry
-            ? newGeometry.radialSegments ?? 8
+            ? (newGeometry.radialSegments ?? 8)
             : null,
-        tube: "tube" in newGeometry ? newGeometry.tube ?? 1 : null,
+        tube: "tube" in newGeometry ? (newGeometry.tube ?? 1) : null,
         tubular_segments:
           "tubularSegments" in newGeometry
-            ? newGeometry.tubularSegments ?? 32
+            ? (newGeometry.tubularSegments ?? 32)
             : null,
-        width: "width" in newGeometry ? newGeometry.width ?? 1 : null,
+        width: "width" in newGeometry ? (newGeometry.width ?? 1) : null,
         width_segments:
           "widthSegments" in newGeometry
-            ? newGeometry.widthSegments ?? 32
+            ? (newGeometry.widthSegments ?? 32)
             : null,
         height_segments:
           "heightSegments" in newGeometry
-            ? newGeometry.heightSegments ?? 32
+            ? (newGeometry.heightSegments ?? 32)
             : null,
         depth_segments:
           "depthSegments" in newGeometry
-            ? newGeometry.depthSegments ?? 32
+            ? (newGeometry.depthSegments ?? 32)
             : null,
         inner_radius:
-          "innerRadius" in newGeometry ? newGeometry.innerRadius ?? null : null,
+          "innerRadius" in newGeometry
+            ? (newGeometry.innerRadius ?? null)
+            : null,
         open_ended:
-          "openEnded" in newGeometry ? newGeometry.openEnded ?? null : null,
+          "openEnded" in newGeometry ? (newGeometry.openEnded ?? null) : null,
         outer_radius:
-          "outerRadius" in newGeometry ? newGeometry.outerRadius ?? null : null,
-        p: "p" in newGeometry ? newGeometry.p ?? 2 : null,
-        q: "q" in newGeometry ? newGeometry.q ?? 3 : null,
+          "outerRadius" in newGeometry
+            ? (newGeometry.outerRadius ?? null)
+            : null,
+        p: "p" in newGeometry ? (newGeometry.p ?? 2) : null,
+        q: "q" in newGeometry ? (newGeometry.q ?? 3) : null,
         theta_length:
-          "thetaLength" in newGeometry ? newGeometry.thetaLength ?? 1 : null,
+          "thetaLength" in newGeometry ? (newGeometry.thetaLength ?? 1) : null,
         theta_start:
-          "thetaStart" in newGeometry ? newGeometry.thetaStart ?? 0 : null,
+          "thetaStart" in newGeometry ? (newGeometry.thetaStart ?? 0) : null,
         theta_segments:
           "thetaSegments" in newGeometry
-            ? newGeometry.thetaSegments ?? 8
+            ? (newGeometry.thetaSegments ?? 8)
             : null,
         phi_length:
           "phiLength" in newGeometry
-            ? newGeometry.phiLength ?? Math.PI * 2
+            ? (newGeometry.phiLength ?? Math.PI * 2)
             : null,
         phi_segments:
-          "phiSegments" in newGeometry ? newGeometry.phiSegments ?? 8 : null,
-        phi_start: "phiStart" in newGeometry ? newGeometry.phiStart ?? 0 : null,
+          "phiSegments" in newGeometry ? (newGeometry.phiSegments ?? 8) : null,
+        phi_start:
+          "phiStart" in newGeometry ? (newGeometry.phiStart ?? 0) : null,
         scale_x: newGeometry.scale_x ?? null,
         scale_y: newGeometry.scale_y ?? null,
         scale_z: newGeometry.scale_z ?? null,
@@ -228,8 +234,18 @@ export default function WorkspacePage({
     }
   };
 
-  if (workspaceLoading) return <div>Loading...</div>;
-  if (meshLoading) return <div>Loading...</div>;
+  if (workspaceLoading)
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  if (meshLoading)
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="w-full h-svh relative">

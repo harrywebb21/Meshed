@@ -28,6 +28,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    color-scheme: dark;
     --background: #000000;
     --foreground: #ededed;
   }
@@ -52,39 +53,7 @@ input {
   @apply text-black;
 }
 
-.create-project-button {
-  /* overflow: hidden;
-  position: relative;
-  place-self: center;
-  place-content: center;
-  z-index: 1; */
-}
-/* 
-.create-project-button::after {
+.loader-border::after {
   content: "";
-  position: absolute;
-  border: solid 1px transparent;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  background: linear-gradient(
-    var(--rotation),
-    #33f563,
-    #0c9287,
-    #ffffff,
-    #065f1d
-  );
-  filter: blur(10px);
-  animation: spin 10s linear infinite;
+  @apply absolute w-full h-full -top-0.5 left-0  items-center justify-center rounded-[50%] border-primary-green inline-block border-t-4 border-r-4  border-r-transparent box-border blur-sm;
 }
-
-@keyframes spin {
-  0% {
-    --rotation: 0turn;
-  }
-  100% {
-    --rotation: 1turn;
-  }
-} */

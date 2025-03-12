@@ -17,6 +17,16 @@ export default function ShapeInputs({ ...props }: ShapeInputsProps) {
         return <SphereInputs {...props} />;
       case "cylinder":
         return <CylinderInputs {...props} />;
+      case "plane":
+        return <PlaneInputs {...props} />;
+      case "torus":
+        return <TorusInputs {...props} />;
+      case "torusKnot":
+        return <TorusKnotInputs {...props} />;
+      case "capsule":
+        return <CapsuleInputs {...props} />;
+      case "cone":
+        return <ConeInputs {...props} />;
     }
   };
 
@@ -210,7 +220,7 @@ function SphereInputs({
         />
 
         <Input
-          label="Length"
+          label="L"
           value={shapeData.thetaLength}
           type="number"
           onChange={(e) => {
@@ -242,7 +252,7 @@ function SphereInputs({
         />
 
         <Input
-          label="Length"
+          label="L"
           value={shapeData.phiLength}
           type="number"
           onChange={(e) => {
@@ -346,7 +356,500 @@ function CylinderInputs({
           }}
         />
       </div>
+      <h1 className=" text-sm text-neutral-600">Theta</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="Start"
+          value={shapeData.thetaStart}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("thetaStart", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                theta_start: value,
+              });
+            }
+          }}
+        />
 
+        <Input
+          label="L"
+          value={shapeData.thetaLength}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("thetaLength", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                theta_length: value,
+              });
+            }
+          }}
+        />
+      </div>
+
+      <h1 className=" text-sm text-neutral-600">Ends</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="Open"
+          value={shapeData.openEnded}
+          type="select"
+          onChange={(e) => {
+            const value = e.target.value;
+            updateShape("openEnded", value === "true" ? true : false);
+            handleInputMutation({
+              open_ended: value === "true" ? true : false,
+            });
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PlaneInputs({
+  shapeData,
+  handleInputMutation,
+  updateShape,
+}: ShapeInputsProps) {
+  return (
+    <div className="flex flex-col max-w-56 gap-2">
+      <h1 className=" text-sm text-neutral-600">Size</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="W"
+          value={shapeData.width}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("width", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                width: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="H"
+          value={shapeData.height}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("height", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                height: value,
+              });
+            }
+          }}
+        />
+      </div>
+
+      <h1 className=" text-sm text-neutral-600">Segments</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="W"
+          value={shapeData.widthSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("widthSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                width_segments: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="H"
+          value={shapeData.heightSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("heightSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                height_segments: value,
+              });
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TorusInputs({
+  shapeData,
+  handleInputMutation,
+  updateShape,
+}: ShapeInputsProps) {
+  return (
+    <div className="flex flex-col max-w-56 gap-2">
+      <h1 className=" text-sm text-neutral-600">Size</h1>
+      <div className="flex flex-col w-full items-center gap-2">
+        <Input
+          label="Radius"
+          value={shapeData.radius}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radius", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radius: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="Tube"
+          value={shapeData.tube}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("tube", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                tube: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="Arc"
+          value={shapeData.arc}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("arc", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                arc: value,
+              });
+            }
+          }}
+        />
+      </div>
+
+      <h1 className=" text-sm text-neutral-600">Segments</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="R"
+          value={shapeData.radialSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radialSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radial_segments: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="T"
+          value={shapeData.tubularSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("tubularSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                tubular_segments: value,
+              });
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TorusKnotInputs({
+  shapeData,
+  handleInputMutation,
+  updateShape,
+}: ShapeInputsProps) {
+  return (
+    <div className="flex flex-col max-w-56 gap-2">
+      <h1 className=" text-sm text-neutral-600">Size</h1>
+      <div className="flex flex-col w-full items-center gap-2">
+        <Input
+          label="Radius"
+          value={shapeData.radius}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radius", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radius: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="Tube"
+          value={shapeData.tube}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("tube", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                tube: value,
+              });
+            }
+          }}
+        />
+      </div>
+
+      <h1 className=" text-sm text-neutral-600">Segments</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="R"
+          value={shapeData.radialSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radialSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radial_segments: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="T"
+          value={shapeData.tubularSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("tubularSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                tubular_segments: value,
+              });
+            }
+          }}
+        />
+      </div>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="P"
+          value={shapeData.p}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("p", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                p: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="Q"
+          value={shapeData.q}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("q", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                q: value,
+              });
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function CapsuleInputs({
+  shapeData,
+  handleInputMutation,
+  updateShape,
+}: ShapeInputsProps) {
+  return (
+    <div className="flex flex-col max-w-56 gap-2">
+      <h1 className=" text-sm text-neutral-600">Size</h1>
+      <div className="flex  w-full items-center gap-2">
+        <Input
+          label="R"
+          value={shapeData.radius}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radius", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radius: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="L"
+          value={shapeData.length}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("length", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                length: value,
+              });
+            }
+          }}
+        />
+      </div>
+
+      <h1 className=" text-sm text-neutral-600">Segments</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="R"
+          value={shapeData.radialSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radialSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radial_segments: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="Cap"
+          value={shapeData.capSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("capSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                cap_segments: value,
+              });
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ConeInputs({
+  shapeData,
+  handleInputMutation,
+  updateShape,
+}: ShapeInputsProps) {
+  return (
+    <div className="flex flex-col max-w-56 gap-2">
+      <h1 className=" text-sm text-neutral-600">Radius</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="R"
+          value={shapeData.radius}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radius", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radius: value,
+              });
+            }
+          }}
+        />
+        <Input
+          label="H"
+          value={shapeData.height}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("height", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                height: value,
+              });
+            }
+          }}
+        />
+      </div>
+      <h1 className=" text-sm text-neutral-600">Side Segments</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="R"
+          value={shapeData.radialSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("radialSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                radial_segments: value,
+              });
+            }
+          }}
+        />
+
+        <Input
+          label="H"
+          value={shapeData.heightSegments}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("heightSegments", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                height_segments: value,
+              });
+            }
+          }}
+        />
+      </div>
+      <h1 className=" text-sm text-neutral-600">Theta</h1>
+      <div className="flex w-full items-center gap-2">
+        <Input
+          label="Start"
+          value={shapeData.thetaStart}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("thetaStart", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                theta_start: value,
+              });
+            }
+          }}
+        />
+
+        <Input
+          label="L"
+          value={shapeData.thetaLength}
+          type="number"
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            updateShape("thetaLength", value);
+            if (!Number.isNaN(value)) {
+              handleInputMutation({
+                theta_length: value,
+              });
+            }
+          }}
+        />
+      </div>
       <h1 className=" text-sm text-neutral-600">Ends</h1>
       <div className="flex w-full items-center gap-2">
         <Input

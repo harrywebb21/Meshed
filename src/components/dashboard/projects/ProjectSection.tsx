@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import ProjectCard from "./ProjectCard";
 import Logo from "@/components/Logo";
 import { useState } from "react";
+import Loader from "@/components/Loader";
 
 export default function ProjectSection() {
   const userId = useAuthUser();
@@ -29,7 +30,11 @@ export default function ProjectSection() {
     console.error("Error fetching workspaces:", error);
   }
   if (!data) {
-    return <p>Loading...</p>;
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   return (

@@ -86,10 +86,15 @@ export async function inviteWorkspaceUser(
   permission_type: string
 ): Promise<WorkspaceUser> {
   const user = await getUserByEmail(email);
-  // const isAlreadyMember = await getWorkspaceUserById(workspace_id, user.id);
   if (!user) {
     throw new Error("User not found");
   }
+
+  const isAlreadyMember = await getWorkspaceUserById(workspace_id, user.id);
+  if (isAlreadyMember && isAlreadyMember.id) {
+    throw new Error("User is already a member of this workspace");
+  }
+
   const { data, error } = await supabase
     .from("WorkspaceUser")
     .insert([
@@ -122,7 +127,12 @@ export async function getWorkspaceUserById(
     .eq("user_id", userId)
     .single();
 
-  if (error) {
+  if (
+    error?.message === "JSON object requested, multiple (or no) rows returned"
+  ) {
+    return {} as WorkspaceUser;
+  } else if (error) {
+    console.error("Error fetching workspace user:", error.message);
     throw error;
   }
 

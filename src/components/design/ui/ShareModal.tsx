@@ -48,7 +48,6 @@ export default function ShareModal({ onclick, workspaceId }: ShareModalProps) {
       setInviteMessage("User invited successfully");
     },
     onError: (error) => {
-      console.error("Error inviting user:", error);
       setInviteMessage(error.message);
     },
   });
@@ -95,28 +94,38 @@ export default function ShareModal({ onclick, workspaceId }: ShareModalProps) {
               </div>
               <div className="w-64">
                 <Dropdown
-                  value={permissionType === "view" ? "can view" : "can edit"}
+                  value={permissionType}
                   options={[
-                    { label: "can edit", value: "edit" },
-                    { label: "can view", value: "view" },
+                    { label: "edit", value: "edit" },
+                    { label: "view", value: "view" },
                   ]}
-                  onChange={(label) => {
-                    setPermissionType(label);
-                    console.log("type", permissionType);
+                  onChange={(value) => {
+                    setPermissionType(value);
                   }}
                 />
               </div>
 
               <button
                 className="bg-primary-green text-primary-gray-950 font-semibold text-sm px-4 rounded-lg"
-                onClick={() =>
-                  inviteMutation.mutate({ workspaceId, email, permissionType })
-                }
+                onClick={() => {
+                  if (!email || !permissionType) {
+                    setInviteMessage("Please fill in all fields");
+                    return;
+                  }
+                  setInviteMessage("");
+                  inviteMutation.mutate({ workspaceId, email, permissionType });
+                }}
               >
                 Invite
               </button>
             </div>
-            {inviteMessage && <p className="text-red-500 ">{inviteMessage}</p>}
+            {inviteMessage && (
+              <p
+                className={`${inviteMessage === "User invited successfully" ? "text-primary-green" : "text-red-500"}`}
+              >
+                {inviteMessage}
+              </p>
+            )}
           </div>
         </div>
       </div>

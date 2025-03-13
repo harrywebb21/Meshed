@@ -7,7 +7,7 @@ import {
   OrbitControls,
 } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
 
 function CameraSetup() {
@@ -22,11 +22,79 @@ function CameraSetup() {
   return null;
 }
 
+export function useScreenshot() {
+  const { gl, scene, camera } = useThree();
+
+  const refs = useRef({ gl, scene, camera });
+
+  useEffect(() => {
+    refs.current = { gl, scene, camera };
+  }, [gl, scene, camera]);
+
+  const takeScreenshot = useCallback(
+    (options = { width: 1920, height: 1080 }) => {
+      const { gl, scene, camera } = refs.current;
+      const originalSize = gl.getSize(new THREE.Vector2());
+      const originalRenderTarget = gl.getRenderTarget();
+
+      gl.setSize(options.width, options.height, false);
+
+      scene.traverse((object) => {
+        if (object.visible === false) {
+        }
+      });
+
+      gl.clear();
+      gl.render(scene, camera);
+      const dataUrl = gl.domElement.toDataURL("image/png");
+
+      gl.setRenderTarget(originalRenderTarget);
+      gl.setSize(originalSize.x, originalSize.y, false);
+
+      return dataUrl;
+    },
+    []
+  );
+  return takeScreenshot;
+}
+
+function SceneCapture({
+  onCapture,
+}: {
+  onCapture?: (captureFunction: () => string) => void;
+}) {
+  const takeScreenshot = useScreenshot();
+  const { scene } = useThree();
+
+  const stableCapture = useCallback(() => {
+    console.log(
+      "Capturing screenshot...with:",
+      scene.children.length,
+      "children"
+    );
+    return takeScreenshot();
+  }, [takeScreenshot]);
+
+  useEffect(() => {
+    if (onCapture) {
+      onCapture(stableCapture);
+    }
+  }, [onCapture, stableCapture]);
+
+  return null;
+}
+
 export default function WorkspaceScene({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  onScreenshotReady,
+}: {
+  children: React.ReactNode;
+  onScreenshotReady?: (captureFunction: () => string) => void;
+}) {
   return (
-    <Canvas gl={{ toneMapping: THREE.NoToneMapping }}>
+    <Canvas
+      gl={{ preserveDrawingBuffer: true, toneMapping: THREE.NoToneMapping }}
+    >
       <ambientLight intensity={5} />
       <spotLight
         position={[1, 1, 10]}
@@ -59,6 +127,7 @@ export default function WorkspaceScene({
           labelColor="black"
         />
       </GizmoHelper>
+      <SceneCapture onCapture={onScreenshotReady} />
     </Canvas>
   );
 }

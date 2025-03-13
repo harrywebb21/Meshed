@@ -5,7 +5,6 @@ import Image from "next/image";
 
 export default function GoogleButton({ type }: { type: "signup" | "login" }) {
   async function handleLoginWithGoogle() {
-    console.log("Logging in with Google");
     const googleAuthError = await loginWithGoogle();
     if (googleAuthError) {
       console.error("Error logging in with Google:", googleAuthError);

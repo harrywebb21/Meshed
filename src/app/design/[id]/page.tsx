@@ -31,6 +31,7 @@ import { Cone } from "@/components/design/geometries/Cone";
 import { Capsule } from "@/components/design/geometries/Capsule";
 import { TorusKnot } from "@/components/design/geometries/TorusKnot";
 import Loader from "@/components/Loader";
+import { useWorkspaceScreenshot } from "@/utils/hooks/workspace-hooks/useWorkspaceScreenshot";
 
 export default function WorkspacePage({
   params,
@@ -45,6 +46,13 @@ export default function WorkspacePage({
   //STATES
   const [selectedGeometry, setSelectedGeometry] = useState<Mesh | null>(null);
   const [geometries, setGeometries] = useState<Mesh[]>([]);
+
+  //STATES FOR SCREENSHOT
+  const { setScreenshotFunction } = useWorkspaceScreenshot({
+    workspaceId: id,
+    interval: 60000, // Take screenshot every minute
+    captureOnUserLeave: true,
+  });
 
   //QUERIES AND DATA FETCHING
   const queryClient = useQueryClient();
@@ -264,7 +272,11 @@ export default function WorkspacePage({
         <AddGeometriesMenu onCreateGeometry={handleCreateGeometry} />
       )}
 
-      <WorkspaceScene>
+      <WorkspaceScene
+        onScreenshotReady={(captureFunction) => {
+          setScreenshotFunction(() => captureFunction);
+        }}
+      >
         {geometries.map((geometry: Mesh) => {
           switch (geometry.type) {
             case "cube":

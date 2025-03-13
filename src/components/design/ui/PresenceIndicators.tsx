@@ -15,7 +15,7 @@ type PresenceState = {
   presence_ref: string;
   user: Profile;
   joined: number;
-  border: string;
+  bg: string;
 };
 
 export default function PresenceIndicators({
@@ -27,37 +27,35 @@ export default function PresenceIndicators({
   const [joinedUsers, setJoinedUsers] = useState<PresenceState[]>([]);
 
   useEffect(() => {
-    const tailwindBordersColors = [
-      "border-red-500",
-      "border-yellow-500",
-      "border-green-500",
-      "border-blue-500",
-      "border-indigo-500",
-      "border-purple-500",
-      "border-pink-500",
+    const tailwindBGColors = [
+      "bg-red-500",
+      "bg-yellow-500",
+      "bg-green-500",
+      "bg-blue-500",
+      "bg-indigo-500",
+      "bg-purple-500",
+      "bg-pink-500",
     ];
 
-    const randomTailwindBorder =
-      tailwindBordersColors[
-        Math.floor(Math.random() * tailwindBordersColors.length)
-      ];
+    const randomTailwindBG =
+      tailwindBGColors[Math.floor(Math.random() * tailwindBGColors.length)];
 
     if (!workspaceId || !userProfile) return;
 
     const channel = supabase.channel(`workspace:${workspaceId}`);
 
     // Update the list based on overall presence state
-    const updatePresence = () => {
+    const updatePresence = async () => {
       const currentPresence = channel.presenceState();
       const users = Object.keys(currentPresence).map(
         (key) => currentPresence[key][0] as PresenceState
       );
+
       setJoinedUsers(users);
     };
 
     channel.on("presence", { event: "sync" }, updatePresence);
     channel.on("presence", { event: "join" }, updatePresence);
-    // Optionally, handle leave events
     channel.on("presence", { event: "leave" }, updatePresence);
 
     // Subscribe to the channel and track presence automatically
@@ -66,7 +64,7 @@ export default function PresenceIndicators({
         await channel.track({
           joined: Date.now(),
           user: userProfile,
-          border: randomTailwindBorder,
+          bg: randomTailwindBG,
         });
       }
     });
@@ -82,7 +80,7 @@ export default function PresenceIndicators({
         <UserAvatar
           key={user.user.id}
           user={user.user}
-          randomTailwindBorder={user.border}
+          randomTailwindColour={user.bg}
         />
       ))}
     </div>

@@ -35,7 +35,6 @@ export default function ShareModal({ onclick, workspaceId }: ShareModalProps) {
       permissionType: string;
       workspaceId: string | undefined;
     }) => {
-      console.log("inviteData", inviteData);
       await inviteWorkspaceUser(
         inviteData.workspaceId,
         inviteData.email,

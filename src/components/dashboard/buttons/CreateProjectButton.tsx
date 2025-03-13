@@ -78,13 +78,7 @@ export default function CreateProjectButton() {
         </div>
       )}
       {createWorkspaceMutation.isSuccess && (
-        <Toast
-          message="Project Created"
-          type="success"
-          onClose={() => {
-            console.log("close project creation modal");
-          }}
-        />
+        <Toast message="Project Created" type="success" onClose={() => {}} />
       )}
     </>
   );

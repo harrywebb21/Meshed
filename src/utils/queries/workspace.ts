@@ -55,11 +55,23 @@ export async function getWorkspaces(userId: string): Promise<Workspace[]> {
     .select("*")
     .eq("owner_id", userId);
 
+  data?.forEach(async (workspace) => {
+    if (workspace.preview_img) {
+      const { data: imgData, error: imgError } = await supabase.storage
+        .from("workspace-previews")
+        .createSignedUrl(workspace.preview_img, 60);
+      if (imgError) {
+        console.error("Error fetching workspace preview:", imgError.message);
+      }
+      if (imgData) {
+        workspace.preview_img = imgData;
+      }
+    }
+  });
   if (error) {
     console.error("Error fetching workspaces:", error.message);
     throw error;
   }
-
   return data;
 }
 
@@ -181,4 +193,38 @@ export async function getSharedWorkspaces(
   }
 
   return workspaces;
+}
+
+export async function uploadWorkspacePreview(img: Blob, workspaceId: string) {
+  let imgBlob = img;
+  if (typeof img === "string") {
+    const response = await fetch(img);
+    imgBlob = await response.blob();
+  }
+
+  const { data, error } = await supabase.storage
+    .from("workspace-previews")
+    .upload(`workspace-${workspaceId}.png`, imgBlob, {
+      upsert: true,
+      contentType: "image/png",
+    });
+
+  if (error) {
+    console.error("Error uploading workspace preview:", error.message);
+    throw error;
+  }
+
+  if (data) {
+    const { error: error2 } = await supabase
+      .from("Workspace")
+      .update({ preview_img: data.path })
+      .eq("id", workspaceId);
+
+    if (error2) {
+      console.error("Error updating workspace preview:", error2.message);
+      throw error2;
+    }
+  }
+
+  return data;
 }

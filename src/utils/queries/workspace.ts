@@ -187,6 +187,20 @@ export async function getSharedWorkspaces(
     .select("*")
     .in("id", workspaceIds);
 
+  workspaces?.forEach(async (workspace) => {
+    if (workspace.preview_img) {
+      const { data: imgData, error: imgError } = await supabase.storage
+        .from("workspace-previews")
+        .createSignedUrl(workspace.preview_img, 60);
+      if (imgError) {
+        console.error("Error fetching workspace preview:", imgError.message);
+      }
+      if (imgData) {
+        workspace.preview_img = imgData;
+      }
+    }
+  });
+
   if (error2) {
     console.error("Error fetching shared workspaces:", error2.message);
     throw error2;

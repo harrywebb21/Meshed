@@ -59,7 +59,7 @@ export async function getWorkspaces(userId: string): Promise<Workspace[]> {
     if (workspace.preview_img) {
       const { data: imgData, error: imgError } = await supabase.storage
         .from("workspace-previews")
-        .createSignedUrl(workspace.preview_img, 60);
+        .createSignedUrl(workspace.preview_img, 86400);
       if (imgError) {
         console.error("Error fetching workspace preview:", imgError.message);
       }
@@ -191,7 +191,7 @@ export async function getSharedWorkspaces(
     if (workspace.preview_img) {
       const { data: imgData, error: imgError } = await supabase.storage
         .from("workspace-previews")
-        .createSignedUrl(workspace.preview_img, 60);
+        .createSignedUrl(workspace.preview_img, 86400);
       if (imgError) {
         console.error("Error fetching workspace preview:", imgError.message);
       }

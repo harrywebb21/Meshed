@@ -170,6 +170,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           email: string
+          email_type: string | null
           id: string
           profile_colour: string | null
           profile_pic_url: string | null
@@ -179,6 +180,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email: string
+          email_type?: string | null
           id?: string
           profile_colour?: string | null
           profile_pic_url?: string | null
@@ -188,6 +190,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email?: string
+          email_type?: string | null
           id?: string
           profile_colour?: string | null
           profile_pic_url?: string | null

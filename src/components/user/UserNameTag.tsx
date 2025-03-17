@@ -2,15 +2,16 @@
 import { useAuthUser } from "@/utils/hooks/useAuthUser";
 import { useGetProfile } from "@/utils/hooks/useGetProfile";
 import UserAvatar from "../design/ui/users/UserAvatar";
-import { FaChevronRight } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import SignoutButton from "../Auth/signout/SignoutButton";
+import SettingsButton from "../settings/SettingsButton";
 
 export default function UserNameTag() {
-  // const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const user = useAuthUser();
   const { profile } = useGetProfile(user?.id);
-  const router = useRouter();
 
   return (
     <>
@@ -19,23 +20,36 @@ export default function UserNameTag() {
         <button
           data-popover="true"
           data-tip="Sign out"
-          onClick={() => router.push("/settings")}
+          onClick={() => setIsOpen(!isOpen)}
           className="flex  items-center justify-center gap-2"
         >
-          <h3 className="text-lg font-semibold">{profile?.display_name}</h3>
-          <FaChevronRight />
-          {/* {isOpen ? <FaChevronUp /> : <FaChevronDown />} */}
+          <h3 className="text-md font-semibold">{profile?.display_name}</h3>
+          {isOpen ? (
+            <FaChevronUp className="text-sm" />
+          ) : (
+            <FaChevronDown className="text-sm" />
+          )}
         </button>
 
-        {/* <div
-          className={`absolute top-12 left-0 w-32  ${
+        <div
+          className={`absolute top-12 -left-3 w-72  ${
             isOpen ? "block" : "hidden"
           }`}
         >
-          <div className="bg-primary-gray-950  rounded-xl shadow-md p-2 border border-primary-gray-900  w-full">
+          <div className="bg-primary-gray-900 border border-primary-green rounded-xl shadow-md p-2 flex flex-col gap-2  w-full">
+            <div className="flex  gap-2 items-center">
+              {profile && <UserAvatar user={profile} />}
+              <div className="flex flex-col">
+                <h3 className="text-md font-semibold">
+                  {profile?.display_name}
+                </h3>
+                <p className="text-sm text-neutral-700">{profile?.email}</p>
+              </div>
+            </div>
+            <SettingsButton />
             <SignoutButton />
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );

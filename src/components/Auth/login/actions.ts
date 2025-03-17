@@ -13,9 +13,8 @@ export async function login(formData: FormData): Promise<string | void> {
     password: formData.get("password") as string,
   };
 
-  const { data: signInData, error } = await supabase.auth.signInWithPassword(
-    data
-  );
+  const { data: signInData, error } =
+    await supabase.auth.signInWithPassword(data);
 
   if (error) {
     console.error("Error logging in:", error.message);
@@ -41,6 +40,9 @@ export async function handleLoginWithEmailCallback(user: User | null) {
     return;
   }
 
+  const hexColour = Math.floor(Math.random() * 16777215).toString(16);
+  const tailwindColour = `bg-[#${hexColour}]`;
+
   // If the profile doesn't exist, create a new one
   if (!userProfile) {
     const { error: insertError } = await supabase.from("Profile").insert([
@@ -49,6 +51,8 @@ export async function handleLoginWithEmailCallback(user: User | null) {
         email: user!.email,
         display_name: user!.user_metadata.display_name,
         profile_pic_url: user!.user_metadata.avatar_url,
+        profile_colour: tailwindColour,
+        email_type: "email",
       },
     ]);
 

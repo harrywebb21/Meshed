@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 interface InputProps {
+  disabled?: boolean;
   label?: string;
   type: string;
   value: string | number | boolean | null | undefined;
@@ -15,6 +16,7 @@ interface InputProps {
 }
 
 export default function Input({
+  disabled = false,
   label,
   type,
   value,
@@ -53,13 +55,14 @@ export default function Input({
             isFocused && isEmpty
               ? "border-red-500"
               : isFocused
-              ? " border-primary-green "
-              : " border-transparent"
+                ? " border-primary-green "
+                : " border-transparent"
           }  bg-primary-gray-950 rounded-md flex items-center gap-2 pl-2 w-full border`}
         >
           {label && <label className="text-neutral-600">{label}</label>}
           <input
             type={type}
+            disabled={disabled}
             className={`${
               type === "number"
                 ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none "
@@ -68,7 +71,7 @@ export default function Input({
               type === "color"
                 ? "appearance-none [&::-webkit-color-swatch]:appearance:none [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-sm [&::-moz-color-swatch]:appearance:none [&::-ms-color-swatch]:appearance:none"
                 : " "
-            } bg-transparent p-1 outline-none text-white shadow-md w-full`}
+            } ${disabled ? "text-neutral-600" : "text-white"} bg-transparent p-1 outline-none  shadow-md w-full`}
             onFocus={() => {
               setIsFocused(true);
               setPreviousValue(value ?? "");
@@ -85,7 +88,9 @@ export default function Input({
                 setIsEmpty(false);
               }
             }}
-            value={typeof value === "boolean" ? value.toString() : value ?? ""}
+            value={
+              typeof value === "boolean" ? value.toString() : (value ?? "")
+            }
             onChange={(e) => {
               onChange(e);
               if (returnValue) {

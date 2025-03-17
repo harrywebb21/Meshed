@@ -32,6 +32,7 @@ export async function signup(formData: FormData): Promise<string | void> {
       email: formData.get("email") as string,
       display_name: formData.get("display_name") as string,
       profile_colour: tailwindColour,
+      emailt_type: "email",
     },
   ]);
 

@@ -51,6 +51,7 @@ export async function handleGoogleCallback(sessionData: {
         email: user!.email,
         display_name: user!.user_metadata.full_name,
         profile_pic_url: user!.user_metadata.avatar_url,
+        email_type: "google",
       },
     ]);
 

@@ -5,6 +5,9 @@ import { User } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+const hexColour = Math.floor(Math.random() * 16777215).toString(16);
+const tailwindColour = `bg-[#${hexColour}]`;
+
 export async function signup(formData: FormData): Promise<string | void> {
   const supabase = await createClient();
 
@@ -28,6 +31,7 @@ export async function signup(formData: FormData): Promise<string | void> {
       user_id: user?.id,
       email: formData.get("email") as string,
       display_name: formData.get("display_name") as string,
+      profile_colour: tailwindColour,
     },
   ]);
 
@@ -67,6 +71,7 @@ export async function handleSignupWithEmailCallback(user: User | null) {
         email: user!.email,
         display_name: user!.user_metadata.display_name,
         profile_pic_url: user!.user_metadata.avatar_url,
+        profile_colour: tailwindColour,
       },
     ]);
 

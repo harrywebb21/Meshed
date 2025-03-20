@@ -77,11 +77,7 @@ export default function PresenceIndicators({
   return (
     <div className="flex -space-x-3 w-full">
       {joinedUsers.map((user) => (
-        <UserAvatar
-          key={user.user.id}
-          user={user.user}
-          randomTailwindColour={user.bg}
-        />
+        <UserAvatar key={user.user.id} user={user.user} />
       ))}
     </div>
   );

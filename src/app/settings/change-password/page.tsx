@@ -3,12 +3,15 @@ import Input from "@/components/design/ui/inputs/Input";
 import Loader from "@/components/Loader";
 import Logo from "@/components/Logo";
 import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { IoArrowBack } from "react-icons/io5";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [updated, setUpdated] = useState<boolean>(false);
+  const router = useRouter();
 
   const supabase = createClient();
 
@@ -62,6 +65,13 @@ export default function ResetPasswordPage() {
   return (
     <div className=" w-full h-full flex flex-col items-center justify-center">
       <div className="flex flex-col w-fit bg-primary-gray-950 gap-4 p-4 rounded-lg shadow-md">
+        <button
+          onClick={() => router.push("/settings")}
+          className="flex items-center gap-2 hover:text-primary-green w-fit"
+        >
+          <IoArrowBack size={16} className=" hover:text-primary-green" />
+          <p className="hover:text-primary-green">Back</p>
+        </button>
         <div className="flex items-center">
           <div className="w-24 h-24 flex items-center justify-center">
             <Logo green />

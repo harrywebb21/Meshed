@@ -17,7 +17,7 @@ export default function DeleteAccountModal({
   const [isOpen, setIsOpen] = useState(false);
   const handleDeleteAccount = async () => {
     if (!userId || userId === undefined) return;
-    const { success, error } = await deleteAccount(userId, confirmPhrase);
+    const { success, error } = await deleteAccount(confirmPhrase);
 
     if (success) {
       router.push("/");

@@ -4,15 +4,22 @@ import { createClient } from "@/utils/supabase/server";
 import { AuthError } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 
-export default async function deleteAccount(
-  userId: string,
-  confirmPhrase: string
-) {
+export default async function deleteAccount(confirmPhrase: string) {
   if (confirmPhrase !== "DELETE MY ACCOUNT") {
     return { success: false, error: "Invalid confirmation phrase" };
   }
+
   try {
     const supabase = await createClient();
+    const {
+      data: { user },
+      error: getUserError,
+    } = await supabase.auth.getUser();
+
+    if (getUserError) {
+      throw new Error(getUserError.message);
+    }
+    const userId = user?.id;
 
     const {
       data: { session },

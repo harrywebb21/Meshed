@@ -55,24 +55,32 @@ export async function getWorkspaces(userId: string): Promise<Workspace[]> {
     .select("*")
     .eq("owner_id", userId);
 
-  data?.forEach(async (workspace) => {
-    if (workspace.preview_img) {
-      const { data: imgData, error: imgError } = await supabase.storage
-        .from("workspace-previews")
-        .createSignedUrl(workspace.preview_img, 86400);
-      if (imgError) {
-        console.error("Error fetching workspace preview:", imgError.message);
-      }
-      if (imgData) {
-        workspace.preview_img = imgData;
-      }
-    }
-  });
   if (error) {
     console.error("Error fetching workspaces:", error.message);
     throw error;
   }
-  return data;
+
+  if (data?.length) {
+    await Promise.all(
+      data.map(async (workspace) => {
+        if (workspace.preview_img) {
+          const { data: imgData, error: imgError } = await supabase.storage
+            .from("workspace-previews")
+            .createSignedUrl(workspace.preview_img, 86400);
+          if (imgError) {
+            console.error(
+              "Error fetching workspace preview:",
+              imgError.message
+            );
+          }
+          if (imgData) {
+            workspace.preview_img = imgData.signedUrl;
+          }
+        }
+      })
+    );
+  }
+  return data || [];
 }
 
 export async function getWorkspaceById(
@@ -187,19 +195,26 @@ export async function getSharedWorkspaces(
     .select("*")
     .in("id", workspaceIds);
 
-  workspaces?.forEach(async (workspace) => {
-    if (workspace.preview_img) {
-      const { data: imgData, error: imgError } = await supabase.storage
-        .from("workspace-previews")
-        .createSignedUrl(workspace.preview_img, 86400);
-      if (imgError) {
-        console.error("Error fetching workspace preview:", imgError.message);
-      }
-      if (imgData) {
-        workspace.preview_img = imgData;
-      }
-    }
-  });
+  if (workspaces?.length) {
+    await Promise.all(
+      workspaces.map(async (workspace) => {
+        if (workspace.preview_img) {
+          const { data: imgData, error: imgError } = await supabase.storage
+            .from("workspace-previews")
+            .createSignedUrl(workspace.preview_img, 86400);
+          if (imgError) {
+            console.error(
+              "Error fetching workspace preview:",
+              imgError.message
+            );
+          }
+          if (imgData) {
+            workspace.preview_img = imgData.signedUrl;
+          }
+        }
+      })
+    );
+  }
 
   if (error2) {
     console.error("Error fetching shared workspaces:", error2.message);

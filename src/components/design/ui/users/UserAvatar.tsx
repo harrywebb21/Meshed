@@ -9,13 +9,15 @@ export default function UserAvatar({ user }: UserAvatarProps) {
   return (
     <div className="">
       {user.profile_pic_url ? (
-        <Image
-          src={user.profile_pic_url}
-          alt={user.display_name || "User Avatar"}
-          className="rounded-full w-8 h-8 shadow-sm"
-          width={32}
-          height={32}
-        />
+        <div className="relative overflow-hidden rounded-full w-8 h-8 shadow-sm flex items-center justify-center">
+          <Image
+            src={user.profile_pic_url}
+            alt={user.display_name || "User Avatar"}
+            objectFit="cover"
+            fill
+            quality={100}
+          />
+        </div>
       ) : (
         <div
           style={{ backgroundColor: user.profile_colour || "#000" }}

@@ -57,7 +57,7 @@ export default function Input({
               : isFocused
                 ? " border-primary-green "
                 : " border-transparent"
-          }  bg-primary-gray-950 rounded-md flex items-center gap-2 pl-2 w-full border`}
+          } ${!label && type === "color" ? "" : "pl-2"}  bg-primary-gray-950 rounded-md flex items-center gap-2  w-full border`}
         >
           {label && <label className="text-neutral-600">{label}</label>}
           <input

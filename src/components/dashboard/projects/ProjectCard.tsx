@@ -2,6 +2,7 @@
 import { Workspace } from "@/utils/supabase/types/dbTypes";
 import { cn } from "@/utils/utils";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ProjectCard({
   projectData,
@@ -15,10 +16,12 @@ export default function ProjectCard({
       className="h-fit"
     >
       <div className=" shadow-md  flex flex-col items-end max-h-56 bg-primary-gray-900 rounded-lg  min-h-fit border border-transparent hover:border-primary-green p-1">
-        {projectData.preview_img?.signedUrl ? (
-          <img
-            src={projectData.preview_img?.signedUrl ?? ""}
+        {projectData.preview_img ? (
+          <Image
+            src={projectData.preview_img ?? ""}
             alt=""
+            width={300}
+            height={160}
             className="w-full h-40 object-cover rounded-t-md"
           />
         ) : (

@@ -2,12 +2,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 interface ToastProps {
+  title?: string;
   message: string;
-  type: "success" | "error";
+  type: "success" | "error" | null;
   onClose?: () => void;
 }
 
-export default function Toast({ message, type, onClose }: ToastProps) {
+export default function Toast({ message, type, title, onClose }: ToastProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function Toast({ message, type, onClose }: ToastProps) {
 
   let borderColor = "";
   if (type === "success") {
-    borderColor = "border-green-500";
+    borderColor = "border-primary-green";
   } else {
     borderColor = "border-red-500";
   }
@@ -42,9 +43,12 @@ export default function Toast({ message, type, onClose }: ToastProps) {
             exit="hidden"
             transition={{ duration: 0.5 }}
             variants={variants}
-            className={`fixed bottom-5 z-50 flex items-center justify-center bg-black/20 gap-4 right-5 p-4 rounded-md  text-white border ${borderColor}`}
+            className={`fixed bottom-5 z-50 flex items-center justify-center bg-primary-gray-900 gap-4 right-5 p-4 rounded-md  text-white border ${borderColor}`}
           >
-            {message}
+            <div className="flex flex-col">
+              {title && <h1 className="text-lg font-semibold">{title}</h1>}
+              <p>{message}</p>
+            </div>
             <button onClick={() => setIsOpen(false)}>
               <IoIosClose className="text-2xl" />
             </button>

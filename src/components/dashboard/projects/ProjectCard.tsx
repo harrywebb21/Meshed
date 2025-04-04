@@ -2,7 +2,7 @@
 import { Workspace } from "@/utils/supabase/types/dbTypes";
 import { cn } from "@/utils/utils";
 import Link from "next/link";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 export default function ProjectCard({
   projectData,
@@ -23,7 +23,10 @@ export default function ProjectCard({
             width={300}
             height={160}
             className="w-full h-40 object-cover rounded-t-md"
-          />
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
         ) : (
           <div
             className={cn(

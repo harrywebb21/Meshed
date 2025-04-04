@@ -1,7 +1,7 @@
 "use client";
 
 import { loginWithGoogle } from "./actions";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 export default function GoogleButton({ type }: { type: "signup" | "login" }) {
   async function handleLoginWithGoogle() {
@@ -23,7 +23,10 @@ export default function GoogleButton({ type }: { type: "signup" | "login" }) {
             width={24}
             height={100}
             alt=" google signin button"
-          />
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
           <p className="text-neutral-600 hover:text-white">
             {type === "login" ? "Login" : "Sign up"} with Google
           </p>

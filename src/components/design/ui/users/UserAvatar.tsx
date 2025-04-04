@@ -1,5 +1,5 @@
 import { Profile } from "@/utils/supabase/types/dbTypes";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 interface UserAvatarProps {
   user: Profile;
@@ -13,10 +13,13 @@ export default function UserAvatar({ user }: UserAvatarProps) {
           <Image
             src={user.profile_pic_url}
             alt={user.display_name || "User Avatar"}
-            objectFit="cover"
             fill
             quality={100}
-          />
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+              objectFit: "cover"
+            }} />
         </div>
       ) : (
         <div

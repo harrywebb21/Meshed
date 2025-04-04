@@ -7,7 +7,7 @@ import { useAuthUser } from "@/utils/hooks/useAuthUser";
 import { useGetProfile } from "@/utils/hooks/useGetProfile";
 import { addMesh, getMeshes } from "@/utils/queries/mesh";
 import AddGeometriesMenu from "@/components/design/ui/AddGeometriesMenu";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { getWorkspaceById } from "@/utils/queries/workspace";
 import ValuesMenu from "@/components/design/ui/ValuesMenu";
 import WorkspaceValuesMenu from "@/components/design/ui/WorkspaceValuesMenu";
@@ -33,11 +33,12 @@ import { TorusKnot } from "@/components/design/geometries/TorusKnot";
 import Loader from "@/components/Loader";
 import { useWorkspaceScreenshot } from "@/utils/hooks/workspace-hooks/useWorkspaceScreenshot";
 
-export default function WorkspacePage({
-  params,
-}: Readonly<{
-  params: { id: string };
-}>) {
+export default function WorkspacePage(
+  props: Readonly<{
+    params: Promise<{ id: string }>;
+  }>
+) {
+  const params = use(props.params);
   //Get the workspace id from the params
   const { id } = params;
   const user = useAuthUser();

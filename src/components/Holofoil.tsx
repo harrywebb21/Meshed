@@ -23,10 +23,10 @@
 
 import { shaderMaterial } from "@react-three/drei";
 import { extend, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { JSX, useRef } from "react";
 import * as THREE from "three";
 
-import { ReactThreeFiber } from "@react-three/fiber";
+import { type ThreeElement } from "@react-three/fiber";
 
 declare module "three" {
   interface ShaderMaterial {
@@ -35,9 +35,8 @@ declare module "three" {
 }
 declare module "@react-three/fiber" {
   interface ThreeElements {
-    holoShader: ReactThreeFiber.Object3DNode<
-      THREE.ShaderMaterial,
-      typeof THREE.ShaderMaterial
+    holoShader: ThreeElement<
+      THREE.ShaderMaterial & typeof THREE.ShaderMaterial
     >;
   }
 }

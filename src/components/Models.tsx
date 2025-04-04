@@ -1,7 +1,7 @@
 "use client";
 import { Float } from "@react-three/drei";
 import { MeshTransmissionMaterial } from "@react-three/drei/core/MeshTransmissionMaterial";
-import { useRef } from "react";
+import { JSX, useRef } from "react";
 import * as THREE from "three";
 
 type GlassBallProps = JSX.IntrinsicElements["group"];

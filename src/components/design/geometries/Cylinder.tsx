@@ -1,9 +1,10 @@
 import { Mesh } from "@/utils/supabase/types/dbTypes";
 import { PivotControls } from "@react-three/drei";
-import { MeshProps, Vector3, Euler } from "@react-three/fiber";
+import { ThreeElements, Vector3, Euler } from "@react-three/fiber";
 import * as THREE from "three";
 import React from "react";
 
+type MeshProps = ThreeElements["mesh"];
 interface CylinderProps extends MeshProps {
   data: Mesh;
   onClick?: () => void;

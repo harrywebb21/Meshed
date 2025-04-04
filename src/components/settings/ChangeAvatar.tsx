@@ -1,7 +1,7 @@
 import { useAuthUser } from "@/utils/hooks/useAuthUser";
 import { useGetProfile } from "@/utils/hooks/useGetProfile";
 import { updateProfileImage } from "@/utils/queries/profile";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { useEffect, useRef, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import Toast from "../Toast";

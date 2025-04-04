@@ -1,7 +1,7 @@
 "use client";
 
 import { loginWithGoogle } from "./actions";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export default function GoogleButton({ type }: { type: "signup" | "login" }) {
   async function handleLoginWithGoogle() {

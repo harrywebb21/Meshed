@@ -1,5 +1,5 @@
 import { Profile } from "@/utils/supabase/types/dbTypes";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 interface UserAvatarProps {
   user: Profile;

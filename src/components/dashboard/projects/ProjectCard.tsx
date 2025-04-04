@@ -2,7 +2,7 @@
 import { Workspace } from "@/utils/supabase/types/dbTypes";
 import { cn } from "@/utils/utils";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export default function ProjectCard({
   projectData,

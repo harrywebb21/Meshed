@@ -44,11 +44,13 @@ export default function ChangeAvatar() {
                 quality={100}
                 alt="avatar"
                 fill
+                sizes="100%"
                 style={{
                   maxWidth: "100%",
-                  height: "auto",
-                  objectFit: "cover"
-                }} />
+
+                  objectFit: "cover",
+                }}
+              />
             </div>
           ) : (
             <div className="w-16 h-16 rounded-full bg-primary-gray-950 flex items-center justify-center shadow-md">

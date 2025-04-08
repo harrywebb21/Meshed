@@ -9,6 +9,8 @@ import {
 import { Canvas, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
+import { useSetAtom } from "jotai";
+import { sceneAtom } from "@/utils/jotai-atoms/sceneAtom";
 
 function CameraSetup() {
   const { camera } = useThree();
@@ -18,6 +20,16 @@ function CameraSetup() {
     (camera as THREE.PerspectiveCamera).fov = 25;
     camera.updateProjectionMatrix();
   }, [camera]);
+
+  return null;
+}
+
+function SceneSetup() {
+  const { scene } = useThree();
+  const setScene = useSetAtom(sceneAtom);
+  useEffect(() => {
+    setScene(scene);
+  }, [scene]);
 
   return null;
 }
@@ -95,14 +107,13 @@ export default function WorkspaceScene({
     <Canvas
       gl={{ preserveDrawingBuffer: true, toneMapping: THREE.NoToneMapping }}
     >
-      <ambientLight intensity={5} />
-      <spotLight
+      {/* <ambientLight intensity={5} /> */}
+      {/* <spotLight
         position={[1, 1, 10]}
         angle={0.15}
         penumbra={1}
         intensity={0.1}
-      />
-      <pointLight position={[10, 10, 10]} />
+      /> */}
       {/* <perspectiveCamera position={[10, 10, 12]} fov={25} /> */}
       <CameraSetup />
       <Environment preset="sunset" />
@@ -110,6 +121,7 @@ export default function WorkspaceScene({
       <group>
         <OrbitControls makeDefault />
         <Grid
+          name="Grid"
           position={[0, 0, 0]}
           args={[100, 100]}
           fadeDistance={100}
@@ -121,13 +133,18 @@ export default function WorkspaceScene({
           sectionThickness={0.5}
         />
       </group>
-      <GizmoHelper alignment="bottom-center" margin={[80, 80]}>
+      <GizmoHelper
+        alignment="bottom-center"
+        name="GizmoHelper"
+        margin={[80, 80]}
+      >
         <GizmoViewport
           axisColors={["#FF1158", "#05FF69", "#04A5FF"]}
           labelColor="black"
         />
       </GizmoHelper>
       <SceneCapture onCapture={onScreenshotReady} />
+      <SceneSetup />
     </Canvas>
   );
 }

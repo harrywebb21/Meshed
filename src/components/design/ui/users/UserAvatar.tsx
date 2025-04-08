@@ -14,12 +14,13 @@ export default function UserAvatar({ user }: UserAvatarProps) {
             src={user.profile_pic_url}
             alt={user.display_name || "User Avatar"}
             fill
+            sizes="100%"
             quality={100}
             style={{
               maxWidth: "100%",
-              height: "auto",
-              objectFit: "cover"
-            }} />
+              objectFit: "cover",
+            }}
+          />
         </div>
       ) : (
         <div

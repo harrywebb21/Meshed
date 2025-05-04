@@ -9,8 +9,8 @@ import {
 import { Canvas, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useSetAtom } from "jotai";
-import { sceneAtom } from "@/utils/jotai-atoms/sceneAtom";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { exportModeAtom, sceneAtom } from "@/utils/jotai-atoms/sceneAtom";
 
 function CameraSetup() {
   const { camera } = useThree();
@@ -103,22 +103,15 @@ export default function WorkspaceScene({
   children: React.ReactNode;
   onScreenshotReady?: (captureFunction: () => string) => void;
 }) {
+  const exportMode = useAtomValue(exportModeAtom);
   return (
     <Canvas
       gl={{ preserveDrawingBuffer: true, toneMapping: THREE.NoToneMapping }}
     >
-      {/* <ambientLight intensity={5} /> */}
-      {/* <spotLight
-        position={[1, 1, 10]}
-        angle={0.15}
-        penumbra={1}
-        intensity={0.1}
-      /> */}
-      {/* <perspectiveCamera position={[10, 10, 12]} fov={25} /> */}
       <CameraSetup />
       <Environment preset="sunset" />
       {children}
-      <group>
+      <group name="SceneGroup" visible={!exportMode}>
         <OrbitControls makeDefault />
         <Grid
           name="Grid"

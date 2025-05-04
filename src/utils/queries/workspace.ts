@@ -257,3 +257,16 @@ export async function uploadWorkspacePreview(img: Blob, workspaceId: string) {
 
   return data;
 }
+
+export async function deleteWorkspace(workspaceId: string) {
+  const { error } = await supabase
+    .from("Workspace")
+    .delete()
+    .eq("id", workspaceId);
+
+  if (error) {
+    console.error("Error deleting workspace:", error.message);
+    throw error;
+  }
+  return true;
+}

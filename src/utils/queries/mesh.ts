@@ -39,3 +39,11 @@ export async function updateMesh(
     throw error;
   }
 }
+
+export async function deleteMesh(meshId: string): Promise<void> {
+  const { error } = await supabase.from("Mesh").delete().eq("id", meshId);
+
+  if (error) {
+    throw error;
+  }
+}

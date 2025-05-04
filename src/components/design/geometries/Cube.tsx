@@ -1,6 +1,8 @@
+import { exportModeAtom } from "@/utils/jotai-atoms/sceneAtom";
 import { Mesh } from "@/utils/supabase/types/dbTypes";
 import { PivotControls } from "@react-three/drei";
 import { ThreeElements } from "@react-three/fiber";
+import { useAtom } from "jotai";
 import React, { useRef } from "react";
 import * as THREE from "three";
 
@@ -40,6 +42,36 @@ export const Cube = ({
       onPivotChange(newPosition, eulerToArray(newRotation), newScale);
     }
   };
+  const [exportMode] = useAtom(exportModeAtom);
+
+  if (exportMode) {
+    return (
+      <mesh
+        {...props}
+        onClick={onClick}
+        position={[data.pos_x ?? 0, data.pos_y ?? 0, data.pos_z ?? 0]}
+        rotation={[data.rot_x ?? 0, data.rot_y ?? 0, data.rot_z ?? 0]}
+        ref={cubeRef}
+        scale={[data.scale_x ?? 1, data.scale_y ?? 1, data.scale_z ?? 1]}
+      >
+        <boxGeometry
+          name="MeshedGeometry"
+          args={[
+            data.width ?? undefined,
+            data.height ?? undefined,
+            data.depth ?? undefined,
+            data.width_segments ?? undefined,
+            data.height_segments ?? undefined,
+            data.depth_segments ?? undefined,
+          ]}
+        />
+        <meshStandardMaterial
+          color={data.colour ?? undefined}
+          wireframe={wireframe}
+        />
+      </mesh>
+    );
+  }
 
   return (
     <PivotControls
@@ -51,7 +83,7 @@ export const Cube = ({
       disableRotations={!showControls}
       disableScaling={!showControls}
       disableSliders={!showControls}
-      userData={{ id: props.uuid }}
+      userData={{ id: props.uuid, isPivotControl: true }}
       onDrag={(local) => {
         if (!cubeRef.current) return;
         const currentPosition =
@@ -81,6 +113,7 @@ export const Cube = ({
         scale={[data.scale_x ?? 1, data.scale_y ?? 1, data.scale_z ?? 1]}
       >
         <boxGeometry
+          name="MeshedGeometry"
           args={[
             data.width ?? undefined,
             data.height ?? undefined,

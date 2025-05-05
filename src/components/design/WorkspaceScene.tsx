@@ -9,7 +9,7 @@ import {
 import { Canvas, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { exportModeAtom, sceneAtom } from "@/utils/jotai-atoms/sceneAtom";
 
 function CameraSetup() {

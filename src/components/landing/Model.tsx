@@ -8,7 +8,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 export default function MeshedModel() {
   const [modelLoaded, setModelLoaded] = useState(false);
-  const { nodes } = useLoader(GLTFLoader, "meshed.glb");
+  const { nodes } = useLoader(GLTFLoader, "/meshed.glb");
 
   useEffect(() => {
     if (nodes && nodes.Cube) {
@@ -39,4 +39,4 @@ export default function MeshedModel() {
   );
 }
 
-useGLTF.preload("meshed.glb");
+useGLTF.preload("/meshed.glb");

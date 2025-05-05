@@ -25,17 +25,10 @@ export function GlassBall(props: GlassBallProps) {
               transparent
             />
           </mesh>
-          <mesh rotation={[0, 0, -2]}>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshBasicMaterial color={"sky"} />
-          </mesh>
+
           <mesh rotation={[0, -2, 0]}>
             <boxGeometry args={[1, 1, 1]} />
             <meshBasicMaterial color={"lime"} />
-          </mesh>
-          <mesh rotation={[-2, 0, 0]}>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshBasicMaterial color={"pink"} />
           </mesh>
         </Float>
       </group>

@@ -87,7 +87,9 @@ export function Holofoil({
 
     vec3 holofoilColors(float intensity) {
       // Map intensity to a hue value between 0 and 1
-      float hue = fract(intensity * intensityRange);
+       float hue = 0.3 + (fract(intensity * intensityRange) * 0.9 - 0.1);
+       float adjustedSaturation = saturation * (1.0 + intensity * 0.2);
+       float adjustedBrightness = brightness * (0.8 + intensity * 0.4);
       return hsv2rgb(vec3(hue, saturation, brightness)); 
     }
 

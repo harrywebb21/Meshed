@@ -1,12 +1,14 @@
 "use client";
 import { Holofoil } from "@/components/landing/Holofoil";
 import { Float, MeshTransmissionMaterial, useGLTF } from "@react-three/drei";
+import { useLoader } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 export default function MeshedModel() {
   const [modelLoaded, setModelLoaded] = useState(false);
-  const { nodes } = useGLTF("/meshed.glb");
+  const { nodes } = useLoader(GLTFLoader, "/meshed.glb");
 
   useEffect(() => {
     if (nodes && nodes.Cube) {

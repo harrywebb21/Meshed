@@ -54,7 +54,7 @@ export default function ModelExporter() {
           },
           { binary: true }
         );
-      }, 5000); // Delay for 5 seconds
+      }, 5000);
     } else {
       console.error("Scene is null and cannot be exported.");
     }

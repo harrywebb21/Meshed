@@ -38,7 +38,6 @@ export function useWorkspaceScreenshot({
     }
   }, [screenshotFn, workspaceId, enabled]);
 
-  // Set up interval for periodic screenshots
   useEffect(() => {
     if (!enabled || !workspaceId || !screenshotFn) return;
 

@@ -20,12 +20,15 @@ import ShareModal from "./ShareModal";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteMesh } from "@/utils/queries/mesh";
+import { DeleteMeshCommand } from "@/utils/commands/MeshCommands";
+import { Command } from "@/utils/commands/types";
 
 interface WorkspaceValuesMenuProps {
   workspaceData?: Workspace;
   geometries: Mesh[];
   selectedGeometry: Mesh | null;
   returnSelectedGeometry: (geometry: Mesh | null) => void;
+  executeCommand?: (command: Command) => Promise<void>;
 }
 
 export default function WorkspaceValuesMenu({
@@ -33,6 +36,7 @@ export default function WorkspaceValuesMenu({
   geometries,
   selectedGeometry,
   returnSelectedGeometry,
+  executeCommand,
 }: WorkspaceValuesMenuProps) {
   const router = useRouter();
   const handleDashboardRedirect = () => {
@@ -55,8 +59,23 @@ export default function WorkspaceValuesMenu({
     },
   });
 
-  const handleDeleteGeometry = (geometryId: string) => {
-    deleteGeometryMutation.mutate(geometryId);
+  const handleDeleteGeometry = async (geometryId: string) => {
+    const geometryToDelete = geometries.find(g => g.id === geometryId);
+    if (!geometryToDelete) return;
+
+    if (executeCommand) {
+      const command = new DeleteMeshCommand(
+        geometryToDelete,
+        () => {
+          queryClient.invalidateQueries({
+            queryKey: ["meshes", workspaceData?.id],
+          });
+        }
+      );
+      await executeCommand(command);
+    } else {
+      deleteGeometryMutation.mutate(geometryId);
+    }
   };
 
   return (

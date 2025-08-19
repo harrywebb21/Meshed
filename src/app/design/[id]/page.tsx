@@ -5,7 +5,7 @@ import { Cube } from "@/components/design/geometries/Cube";
 import WorkspaceScene from "@/components/design/WorkspaceScene";
 import { useAuthUser } from "@/utils/hooks/useAuthUser";
 import { useGetProfile } from "@/utils/hooks/useGetProfile";
-import { addMesh, getMeshes } from "@/utils/queries/mesh";
+import { getMeshes } from "@/utils/queries/mesh";
 import AddGeometriesMenu from "@/components/design/ui/AddGeometriesMenu";
 import { useEffect, useState, use } from "react";
 import { getWorkspaceById } from "@/utils/queries/workspace";
@@ -32,6 +32,9 @@ import { Capsule } from "@/components/design/geometries/Capsule";
 import { TorusKnot } from "@/components/design/geometries/TorusKnot";
 import Loader from "@/components/Loader";
 import { useWorkspaceScreenshot } from "@/utils/hooks/workspace-hooks/useWorkspaceScreenshot";
+import { useCommandHistory } from "@/utils/hooks/useCommandHistory";
+import { AddMeshCommand } from "@/utils/commands/MeshCommands";
+import UndoRedoControls from "@/components/design/ui/UndoRedoControls";
 
 export default function WorkspacePage(
   props: Readonly<{
@@ -55,6 +58,9 @@ export default function WorkspacePage(
     captureOnUserLeave: true,
   });
 
+  //COMMAND HISTORY FOR UNDO/REDO
+  const { executeCommand, undo, redo, canUndo, canRedo, undoDescription, redoDescription } = useCommandHistory();
+
   //QUERIES AND DATA FETCHING
   const queryClient = useQueryClient();
   const supabase = createClient();
@@ -71,19 +77,6 @@ export default function WorkspacePage(
   });
 
   // MUTATIONS
-  const newMeshMutation = useMutation({
-    mutationFn: async (newGeometry: Mesh) => {
-      await addMesh(newGeometry);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["meshes", id],
-      });
-    },
-    onError: () => {
-      console.error("Error adding mesh");
-    },
-  });
   const updateMeshCountMutation = useMutation({
     mutationFn: async (newMeshCounts: { [key: string]: number }) => {
       await supabase
@@ -131,7 +124,7 @@ export default function WorkspacePage(
   }, [meshData]);
 
   // FUNCTIONS / HANDLERS
-  const handleCreateGeometry = (
+  const handleCreateGeometry = async (
     newGeometry:
       | CubeGeometry
       | SphereGeometry
@@ -236,7 +229,17 @@ export default function WorkspacePage(
         updated_at: new Date().toISOString(),
       };
 
-      newMeshMutation.mutate(newMesh);
+      const command = new AddMeshCommand(
+        newMesh,
+        id,
+        () => {
+          queryClient.invalidateQueries({
+            queryKey: ["meshes", id],
+          });
+        }
+      );
+      
+      await executeCommand(command);
       updateMeshCountMutation.mutate(meshCounts);
     } catch (error) {
       console.error("Error adding mesh:", error);
@@ -264,13 +267,26 @@ export default function WorkspacePage(
           geometries={geometries}
           selectedGeometry={selectedGeometry}
           returnSelectedGeometry={setSelectedGeometry}
+          executeCommand={executeCommand}
         />
       )}
       {selectedGeometry && user && profile && (
         <ValuesMenu meshData={selectedGeometry} workspaceId={id} />
       )}
       {user && profile && (
-        <AddGeometriesMenu onCreateGeometry={handleCreateGeometry} />
+        <>
+          <AddGeometriesMenu onCreateGeometry={handleCreateGeometry} />
+          <div className="absolute top-4 right-4 z-10">
+            <UndoRedoControls
+              canUndo={canUndo}
+              canRedo={canRedo}
+              onUndo={undo}
+              onRedo={redo}
+              undoDescription={undoDescription}
+              redoDescription={redoDescription}
+            />
+          </div>
+        </>
       )}
 
       <WorkspaceScene
